@@ -7,22 +7,7 @@ module.exports = {
        
         return new Promise (async(resolve,reject)=>{
 
-            if(category === 'Men' || category === 'Women'){
-
-                let proQty = await db.get().collection(collection.PRODUCT_COLLECTION).countDocuments({category:category,listed:true})  
-
-                if(skipNo == '0'){
-
-                    let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({category:category,listed:true}).limit(8).toArray()
-                    resolve([products,proQty])
-                }else{
-                    let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({category:category,listed:true}).limit(8).skip(skipNo*8).toArray()
-                    resolve([products])
-                }
-            }else if(category === 'Top Selling'){
-                let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({listed:true}).sort({count:-1}).limit(4).toArray()
-                resolve([products,proQty=8])
-            }else{
+            if(category === 'All Products' || category == 0){
 
                 let proQty = await db.get().collection(collection.PRODUCT_COLLECTION).countDocuments({listed:true})
 
@@ -34,20 +19,37 @@ module.exports = {
                     let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({listed:true}).limit(8).skip(skipNo*8).toArray()
                     resolve([products,proQty])
                 }
+
+            }else if(category === 'Top Selling'){
+                let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({listed:true}).sort({count:-1}).limit(4).toArray()
+                resolve([products,proQty=8])
+            }else{
+
+                let proQty = await db.get().collection(collection.PRODUCT_COLLECTION).countDocuments({category:category,listed:true})  
+
+                if(skipNo == '0'){
+
+                    let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({category:category,listed:true}).limit(8).toArray()
+                    resolve([products,proQty])
+                }else{
+                    let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({category:category,listed:true}).limit(8).skip(skipNo*8).toArray()
+                    resolve([products])
+                }
+                
             }
         })
     },
-    searchKeyByName:(category,keyWord)=>{
+        searchKeyByName:(category=0,keyWord)=>{
         return new Promise (async(resolve,reject)=>{
             const regex = new RegExp(keyWord, 'i');
-            if(category === 'Men' || category === 'Women'){
-                let searchResult = await db.get().collection(collection.PRODUCT_COLLECTION).find({category:category,name:{$regex:regex}}).toArray()
+            if(category == 'All Products' || category == 0){
+                let searchResult = await db.get().collection(collection.PRODUCT_COLLECTION).find({name:{$regex:regex}}).toArray()
                 resolve(searchResult)
             }else if(category === 'Top Selling'){
                 let searchResult = await db.get().collection(collection.PRODUCT_COLLECTION).find({name:{$regex:regex}}).sort({count:-1}).limit(2).toArray()
                 resolve(searchResult)
             }else{
-                let searchResult = await db.get().collection(collection.PRODUCT_COLLECTION).find({name:{$regex:regex}}).toArray()
+                let searchResult = await db.get().collection(collection.PRODUCT_COLLECTION).find({category:category,name:{$regex:regex}}).toArray()
                 resolve(searchResult)
             }
         })
