@@ -98,7 +98,8 @@ module.exports = {
               dated: {
                 $gte: new Date(previousYearDate),
                 $lte: new Date(lastDayOfLastMonth)
-              }
+              },
+              orderStatus:"Delivered"
             }
           },
           {
