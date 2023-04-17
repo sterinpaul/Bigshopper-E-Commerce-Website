@@ -1,0 +1,158 @@
+
+<section class="content-main d-flex flex-column" style="margin:0 auto">
+    <div class="content-header d-flex justify-content-between align-items-center m-3">
+        <div class="m-2">
+            <h2>Dashboard</h2>
+            <p>Whole data about your business here</p>
+        </div>
+        <div>
+            <a href="/admin/sales-report" class="btn btn-primary m-2">Create report</a>
+        </div>
+    </div>
+    <div class="d-flex flex-wrap m-2">
+        <div class="col-md-3">
+            <div class="card card-body mb-4 dashBoardCard">
+                <article class="icontext" style="min-height:6.5rem;">
+                    <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
+                    <div class="text">
+                        <h5 class="mb-1 card-title">Revenue</h5>
+                        <h3>₹ {{totalSales.total}}</h3>
+                        <span class="text-sm">
+                            Shipping fees are not included
+                        </span>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-body mb-4 dashBoardCard">
+                <article class="icontext" style="min-height:6.5rem;">
+                    <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
+                    <div class="text">
+                        <h5 class="mb-1 card-title">Orders</h5>
+                        <h3>{{totalSales.count}}</h3>
+                        <span class="text-sm">
+                            Excluding orders in transit
+                        </span>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-body mb-4 dashBoardCard">
+                <article class="icontext" style="min-height:6.5rem;">
+                    <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-qr_code"></i></span>
+                    <div class="text">
+                        <h5 class="mb-1 card-title">Products</h5>
+                        <h3>{{productsCount}}</h3>
+                        <span class="text-sm">
+                            In {{categoryData.length}} Categories
+                        </span>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-body mb-4 dashBoardCard">
+                <article class="icontext" style="min-height:6.5rem;">
+                    <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                    <div class="text">
+                        <h5 class="mb-1 card-title">Monthly Earning</h5>
+                        <h3>₹ {{avgMonthSale}}</h3>
+                        <span class="text-sm">
+                            Based on orders.
+                        </span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-wrap justify-content-between gap-2 w-100 p-2">
+       <div class="m-auto pt-3">
+            <article class="card card-body text-center">
+                <h5>Last year Sale</h5>
+                <canvas id="myChartMonthly" style="max-width:415px;"></canvas>
+            </article>
+        </div>
+
+        <div class="m-auto pt-3">
+            <article class="card card-body m-auto text-center">
+                <h5>Sales by category</h5>
+                <canvas id="myChart" style="max-width:415px;"></canvas>
+            </article>
+        </div>
+    </div>
+</section>
+        
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+        
+<script>
+
+    let xaValues = []
+    let yaValues = []
+
+    {{#each monthlySales}}
+        xaValues.push('{{this.month}}')
+        yaValues.push({{this.totalSales}})
+    {{/each}}
+
+{{!-- var xaValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+var yaValues = [55, 49, 44, 24, 15]; --}}
+var baraColors = ["orange","brown","orange","brown","orange","brown","orange","brown","orange","brown","orange","brown"];
+
+new Chart("myChartMonthly", {
+  type: "bar",
+  data: {
+    labels: xaValues,
+    datasets: [{
+      backgroundColor: baraColors,
+      data: yaValues
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: ""
+    }
+  }
+});
+
+    
+
+
+    let xValues =[]
+    let yValues =[]
+
+    {{#each categoryData}}
+        xValues.push('{{this.category}}')
+        yValues.push({{this.count}})
+    {{/each}}
+  
+    var barColors = [
+      "#b91d47",
+      "#00aba9",
+      "#2b5797",
+      "#e8c3b9",
+      "#1e7145"
+    ];
+
+    new Chart("myChart", {
+      type: "doughnut",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: barColors,
+          data: yValues
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: ""
+        }
+      }
+    });
+
+</script>

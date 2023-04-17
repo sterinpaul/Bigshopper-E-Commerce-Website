@@ -1,0 +1,45 @@
+<section>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="md-6 mt-2 add-product-container">
+                <h2 class="text-center mb-2">Edit User</h2>
+                <form action="/admin/edit-user/{{user._id}}" method="POST" enctype="multipart/form-data">
+                    <table>
+                        <tr>
+                            <td><label for="fName">First Name</label></td>
+                            <td class="pl-2"><input id="fName" type="text" class="form-control" name="fName" value="{{user.fName}}" required></td>
+                        </tr>
+                         <tr>
+                            <td><label for="lName">Last Name</label></td>
+                            <td class="pl-2"><input id="lName" type="text" class="form-control" name="lName" value="{{user.lName}}" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="gender">Gender</label></td>
+                            <td class="pl-2">
+                              <select class="form-control" name="gender" id="gender">
+                                <option>{{user.gender}}</option>
+                                {{#ifvalue user.gender 'Male'}}
+                                    <option>Female</option>
+                                {{else}}
+                                    <option>Male</option>
+                                {{/ifvalue}}
+                              </select>
+                            </td>
+                        </tr>
+                         <tr>
+                            <td><label for="email">Email</label></td>
+                            <td class="pl-2"><input id="email" type="email" class="form-control" name="email" value="{{user.email}}" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="mobile">Mobile No.</label></td>
+                            <td class="pl-2"><input id="mobile" type="text" class="form-control" name="mobile" value="{{user.mobile}}" required></td>
+                        </tr>
+                    </table>
+                    <div class="mt-3 text-center">
+                      	<button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

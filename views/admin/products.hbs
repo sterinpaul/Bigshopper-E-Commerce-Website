@@ -1,0 +1,57 @@
+<section>
+    <div class="admin-home-container">
+    
+        <a class="btn btn-primary" href="/admin/add-product">Add Product</a>
+        
+        <table class="table table-striped" id="productsTable">
+            <thead>
+              <tr>
+                <th scope="col" style="text-align:center;">No.</th>
+                <th scope="col">Category</th>
+                <th scope="col">Sub-Category</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Name</th>
+                <th scope="col">Specification</th>
+                <th scope="col" style="text-align:center;">Image</th>
+                <th scope="col" style="text-align:center;">Qty.</th>
+                <th scope="col" style="text-align:center;">Price</th>
+                
+                <th scope="col" style="text-align:center;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              {{#each products}}
+              <tr>
+                <td>{{inc @index}}</td>
+                <td>{{this.category}}</td>
+                <td>{{this.subCategory}}</td>
+                <td>{{this.brand}}</td>
+                <td>{{this.name}}</td>
+                <td>{{this.specification}}</td>
+                <td>
+                  {{!-- {{#each products.images}} --}}
+                  
+                  <img class="img-size" src="/img/products/{{this.images.[0]}}" alt="">
+                  {{!-- {{/each}} --}}
+                </td>
+                <td>{{this.quantity}}</td>
+                <td>₹ {{this.price}}</td>
+                
+                <td style="display:flex;flex-flow:column;">
+                  <a href="/admin/edit-product?id={{this._id}}" class="btn btn-primary" style="margin-left:auto;margin-right:auto;">Edit</a>
+                  
+                  {{#if this.listed}}
+                  <a href="/admin/unlist-product?id={{this._id}}" class="btn btn-danger mt-1" style="margin-left:auto;margin-right:auto;" onclick="return confirm(`Do you want to unlist the item '{{this.brand}} - {{this.subCategory}}' ?`)">Unlist</a>
+                    {{else}}
+                  <a href="/admin/addToList-product?id={{this._id}}" class="btn btn-primary mt-1" style="margin-left:auto;margin-right:auto;" onclick="return confirm(`Do you want to list the item '{{this.brand}} - {{this.subCategory}}' ?`)">Add to list</a>
+                    {{/if}}
+                </td>
+              </tr>
+              {{/each}}
+
+            </tbody>
+        </table>
+    </div>
+</section>
+

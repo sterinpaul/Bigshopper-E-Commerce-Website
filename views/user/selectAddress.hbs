@@ -1,0 +1,56 @@
+
+<!-- Choose Address -->
+	
+<div class="d-flex flex-column justify-content-center align-items-center">
+
+    <div class="m-4">
+        <h3>Select Your Address</h3>
+    </div>
+    <div class="d-flex justify-content-center flex-wrap">
+    {{!-- <form action="/add-address" method="POST" enctype="multipart/form-data"> --}}
+        {{#each addresses.address}}
+            <div class="d-flex flex-column align-items-center p-2 m-2" style="width:26rem;max-width:25rem;border-radius:.3rem;background:rgba(236, 236, 236, 0.713);">
+                <table class="table-striped" id="addressTable">
+                    <tr>
+                       <td>Flat No./House Name </td>
+                       <td> {{this.houseName}}</td>
+                    </tr>
+                    <tr>
+                       <td>Street </td>
+                       <td> {{this.street}}</td>
+                    </tr>
+                    <tr>
+                       <td>Town </td>
+                       <td> {{this.town}}</td>
+                    </tr>
+                    <tr>
+                       <td>District </td>
+                       <td> {{this.district}}</td>
+                    </tr>
+                    <tr>
+                       <td>State </td>
+                       <td> {{this.state}}</td>
+                    </tr>
+                    <tr>
+                       <td>Pin Code </td>
+                       <td> {{this.pinCode}}</td>
+                    </tr>
+                    <tr>
+                       <td>Mobile No. </td>
+                       <td> {{this.mobileNo}}</td>
+                    </tr>
+                </table>
+                <div class="m-2">
+                    <a class="btn btn-primary" href="/order-confirm?id={{this.id}}">Select</a>
+                </div>
+            </div>
+        {{/each}}
+        </div>
+        
+        <div class="m-3 text-center">
+          	<a href="/addAddress" class="btn btn-primary">Add Address</a>
+        </div>
+    {{!-- </form> --}}
+</div>
+
+

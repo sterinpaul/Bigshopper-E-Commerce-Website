@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>{{title}}</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="/images/icons/favicon.png"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/fonts/iconic/css/material-design-iconic-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/fonts/linearicons-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/select2/select2.min.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="/vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/slick/slick.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/MagnificPopup/magnific-popup.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
+<!--===============================================================================================-->
+    
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+</head>
+<body class="animsition">
+
+  {{#if admin}}
+    {{>admin-header}}
+  {{else}}
+    {{>user-header}}
+  {{/if}}
+
+    {{{body}}}
+
+	{{#if admin}}
+		
+		{{else}}
+		{{>user-footer}}
+	{{/if}}
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+<!--===============================================================================================-->	
+	<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/vendor/bootstrap/js/popper.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/vendor/select2/select2.min.js"></script>
+	<script src="/js/ajax.js"></script>
+	<script>
+		$(".js-select2").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect2')
+			});
+		})
+	</script>
+<!--===============================================================================================-->
+	<script src="/vendor/daterangepicker/moment.min.js"></script>
+	<script src="/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="/vendor/slick/slick.min.js"></script>
+	<script src="/js/slick-custom.js"></script>
+<!--===============================================================================================-->
+	<script src="/vendor/parallax100/parallax100.js"></script>
+	<script>
+        $('.parallax100').parallax100();
+	</script>
+<!--===============================================================================================-->
+	<script src="/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+	<script>
+		$('.gallery-lb').each(function() { // the containers for all your galleries
+			$(this).magnificPopup({
+		        delegate: 'a', // the selector for gallery item
+		        type: 'image',
+		        gallery: {
+		        	enabled:true
+		        },
+		        mainClass: 'mfp-fade'
+		    });
+		});
+	</script>
+<!--===============================================================================================-->
+	<script src="/vendor/isotope/isotope.pkgd.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/vendor/sweetalert/sweetalert.min.js"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+	{{!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/shim.min.js'></script> --}}
+	
+	<script>
+		$('.js-addwish-b2').on('click', function(e){
+			e.preventDefault();
+		});
+
+		$('.js-addwish-b2').each(function(){
+			var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
+			$(this).on('click', function(){
+				swal(nameProduct, "is added to wishlist !", "success");
+
+				$(this).addClass('js-addedwish-b2');
+				$(this).off('click');
+			});
+		});
+
+		$('.js-addwish-detail').each(function(){
+			var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
+
+			$(this).on('click', function(){
+				swal(nameProduct, "is added to wishlist !", "success");
+
+				$(this).addClass('js-addedwish-detail');
+				$(this).off('click');
+			});
+		});
+
+		/*---------------------------------------------*/
+
+		$('.js-addcart-detail').each(function(){
+			var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+			$(this).on('click', function(){
+				swal(nameProduct, "is added to cart !", "success");
+			});
+		});
+	
+	</script>
+<!--===============================================================================================-->
+	<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script>
+		$('.js-pscroll').each(function(){
+			$(this).css('position','relative');
+			$(this).css('overflow','hidden');
+			var ps = new PerfectScrollbar(this, {
+				wheelSpeed: 1,
+				scrollingThreshold: 1000,
+				wheelPropagation: false,
+			});
+
+			$(window).on('resize', function(){
+				ps.update();
+			})
+		});
+	</script>
+<!--===============================================================================================-->
+	<script src="/js/main.js"></script>
+	
+	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+	{{!-- <script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-auth-compat.js"></script> --}}
+
+	<script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+	
+
+    <script>
+        
+        const firebaseConfig = {
+          apiKey: "AIzaSyAAW6-UTWLpsWbSpNErrHw0clv_ZocgqAM",
+          authDomain: "bigshopper-e42cc.firebaseapp.com",
+          projectId: "bigshopper-e42cc",
+          storageBucket: "bigshopper-e42cc.appspot.com",
+          messagingSenderId: "1086780320794",
+          appId: "1:1086780320794:web:714f3fee5812912a6f75a3",
+          measurementId: "G-WXV0190WNC"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        render();
+
+        function render(){
+            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container',{
+                'size':'invisible',
+                'callback':(response)=>{
+                    onSignInSubmit()
+                }
+            })
+            recaptchaVerifier.render();
+        }
+		
+		/*
+   		function render(){
+            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container')
+            recaptchaVerifier.render();
+        }
+		*/
+        
+        function phoneAuth(){
+            var number = "+91"+document.getElementById('mobile').value;
+			
+            firebase.auth().signInWithPhoneNumber(number,window.recaptchaVerifier).then(function(confirmationResult){
+                window.confirmationResult = confirmationResult;
+                coderesult = confirmationResult;
+				
+                document.getElementById('sender').style.display = 'none';
+                document.getElementById('verifier').style.display = 'block';
+            }).catch(function(error){
+                console.log(error.message);
+            });
+        }
+        
+        // Function for OTP verification
+        function codeverify(){
+            var code = document.getElementById('OtpField').value;
+			var number = document.getElementById('mobile').value;
+            coderesult.confirm(code).then(function(){
+                document.getElementById('verified').style.display = 'block';
+                document.getElementById('unVerified').style.display = 'none';
+				document.getElementById('verifier').style.display = 'none';
+				document.getElementById('signInBtn').style.display = 'block';
+
+				document.getElementById('mobileNum').value = number;
+				
+            }).catch(function(){
+                document.getElementById('verified').style.display = 'none';
+                document.getElementById('unVerified').style.display = 'block';
+				document.getElementById('signInBtn').style.display = 'none';
+            })
+        }
+
+
+    </script>
+
+</body>
+</html>

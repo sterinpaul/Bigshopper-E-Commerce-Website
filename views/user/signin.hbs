@@ -1,0 +1,60 @@
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+          <div class="card-body pl-5 pr-5 text-center">
+
+            <div class="mb-md-5 mt-md-4 pb-3">
+
+              <h2 class="fw-bold mb-2 text-uppercase">Sign in</h2>
+              <p class="text-white-50 mb-5">Please enter your Email and password!</p>
+
+              <form action="/signin" method="POST" role="form" enctype="application/x-www-form-urlencoded">
+                <div class="form-outline form-white mb-4">
+                  <input type="email" id="typeEmailX" name="email" class="form-control form-control-lg" />
+                  <label class="form-label" for="typeEmailX">Email</label>
+                </div>
+
+                <div class="form-outline form-white mb-4">
+                  <input type="password" id="typePasswordX" name="password" class="form-control form-control-lg" />
+                  <label class="form-label" for="typePasswordX">Password</label>
+                </div>
+
+                <label class="form-label" id="errorLoginPassword"></label>
+
+                {{!-- <p class="small mb-1 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p> --}}
+
+                 {{#if invalidUser}}
+                  <label class="form-label mt-3" style="color:white">* Invalid Email/password</label>
+                {{/if}}
+
+                {{#if blocked}}
+                  <label class="form-label mt-3" style="color:white">* User Blocked</label>
+                {{/if}}
+
+                {{#if userLog}}
+                {{else}}
+                  <label class="form-label mt-3" style="color:white">* Sign out Successful</label>
+                {{/if}}
+
+                {{#if unAuthorized}}
+                  <label class="form-label mt-3" style="color:white">* Unauthorized user</label>
+                {{/if}}
+
+                <button class="btn btn-outline-light btn-lg px-5 m-auto" onclick="return signinValidation()" type="submit" id="loginBtn">Submit</button>
+                <p class="m-2">OR</p>
+                <a class="btn btn-primary btn-lg text-white-50" href="/signInOtp">Sign in with OTP</a>
+
+              </form>
+              <div>
+                <p class="mt-3">Don't have an account? <a href="/signup" class="text-white-50 fw-bold">Sign Up</a></p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
