@@ -171,10 +171,16 @@ module.exports = {
             })
         })
     },
-    unlistCategory:(categoryId)=>{
+    unlistListCategory:(categoryData)=>{
         return new Promise(async(resolve,reject)=>{
-            await db.get().collection(collection.CATEGORY_COLLECTION).updateOne({_id:objectId(categoryId)},{$set:{listed:false}}).then((response)=>{
-                resolve(response)
+            if(categoryData.listed == 'true'){
+                categoryData.listed = true
+            }else{
+                categoryData.listed = false
+            }
+            
+            await db.get().collection(collection.CATEGORY_SUB_COLLECTION).updateOne({_id:objectId(categoryData.id)},{$set:{listed:(categoryData.listed)}}).then(()=>{
+                resolve()
             })
         })
     },

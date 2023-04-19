@@ -271,6 +271,13 @@ table tr td{
   background:rgba(122, 166, 242, 0.2)
 }
 
+.main-menu li a.active {
+  color: blue;
+}
+
+
+
+
 @font-face {
   font-family: Poppins-Regular;
   src: url('../fonts/Poppins/Poppins-Regular.ttf'); 

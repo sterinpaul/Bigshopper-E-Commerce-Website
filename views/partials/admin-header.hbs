@@ -8,30 +8,30 @@
 				<nav class="limiter-menu-desktop container">
 					
 					<!-- Logo desktop -->		
-					<a href='/admin' class="logo">BigShopper Admin</a>
+					<a href='/admin' class="logo {{#if dashPage}}active{{/if}}">BigShopper Admin</a>
 
 					{{#if adminLog}}
 					<!-- Menu desktop -->
 						<div class="menu-desktop">
 							<ul class="main-menu">
 								<li>
-									<a href='/admin/user-management'>Users</a>
+									<a href='/admin/user-management' class="{{#if userPage}}active{{/if}}">Users</a>
 								</li>
 
 								<li>
-									<a href="/admin/product-management">Products</a>
+									<a href="/admin/product-management" class="{{#if proPage}}active{{/if}}">Products</a>
 								</li>
 
 								<li>
-									<a href="/admin/category-management">Categories</a>
+									<a href="/admin/category-management" class="{{#if catPage}}active{{/if}}">Categories</a>
 								</li>
 
 								<li>
-									<a href="/admin/order-management">Orders</a>
+									<a href="/admin/order-management" class="{{#if orderPage}}active{{/if}}">Orders</a>
 								</li>
 
 								<li>
-									<a href="/admin/coupon-management">Coupons</a>
+									<a href="/admin/coupon-management" class="{{#if couponPage}}active{{/if}}">Coupons</a>
 								</li>
 							</ul>
 						</div>

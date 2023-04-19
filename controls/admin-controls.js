@@ -33,7 +33,7 @@ module.exports = {
 
         let avgMonthSale = Math.round(totalSales.total/totalSales.months)
         let productsCount = categoryData[0].totalNum + categoryData[1].totalNum
-        res.render('admin/dashboard', { title: 'BigShopper Admin',admin:true,adminLog:true,totalSales,categoryData,productsCount,avgMonthSale,monthlySales});
+        res.render('admin/dashboard', { title: 'BigShopper Admin',admin:true,adminLog:true,totalSales,categoryData,productsCount,avgMonthSale,monthlySales,dashPage:true});
     },
     adminSignout:(req,res)=>{
         req.session.admin = null;
@@ -43,7 +43,7 @@ module.exports = {
     getUserManagement:(req,res)=>{
         // if(req.session.admin){
             userHelpers.getAllUsers().then((users)=>{
-                res.render('admin/users', { title: 'BigShopper Admin',admin:true,adminLog:true,users});
+                res.render('admin/users', { title: 'BigShopper Admin',admin:true,adminLog:true,users,userPage:true});
             })
         // }else{
             // res.redirect('/admin');
@@ -52,7 +52,7 @@ module.exports = {
     getEditUser:async(req,res)=>{
         let user = await userHelpers.getUserDetails(req.query.id)
         // if(req.session.admin){
-            res.render('admin/edit-user',{ title: 'BigShopper Admin',admin:true,adminLog:true,user})
+            res.render('admin/edit-user',{ title: 'BigShopper Admin',admin:true,adminLog:true,user,userPage:true})
         // }else{
             // res.redirect('/admin');
         // }
@@ -89,7 +89,7 @@ module.exports = {
             products = response[0]
             let qty = response[1]
             if(category === undefined){
-                res.render('admin/products', { title: 'BigShopper Admin',admin:true,adminLog:true,products,categoryData,qty});
+                res.render('admin/products', { title: 'BigShopper Admin',admin:true,adminLog:true,products,categoryData,qty,proPage:true});
             }else{
                 res.json([products,qty])
             }
@@ -97,7 +97,7 @@ module.exports = {
     },
     getAddProduct:(req,res)=>{
         productHelpers.getAllCategories().then((response)=>{
-            res.render('admin/add-product', { title: 'BigShopper Admin',admin:true,adminLog:true,response});
+            res.render('admin/add-product', { title: 'BigShopper Admin',admin:true,adminLog:true,response,proPage:true});
         })
     },
     postAddProduct:(req,res)=>{
@@ -132,7 +132,7 @@ module.exports = {
         let product = await productHelpers.getProductDetails(req.query.id)
         let category = product.category
         productHelpers.getAllCategories(category).then((response)=>{
-            res.render('admin/edit-product',{ title: 'BigShopper Admin',admin:true,adminLog:true,product,response})
+            res.render('admin/edit-product',{ title: 'BigShopper Admin',admin:true,adminLog:true,product,response,proPage:true})
         })
 
     },
@@ -176,7 +176,7 @@ module.exports = {
     },
     getCategoryManagement:(req,res)=>{
         productHelpers.getAllCategories().then((response)=>{
-            res.render('admin/categories', { title: 'BigShopper Admin',admin:true,adminLog:true,response});
+            res.render('admin/categories', { title: 'BigShopper Admin',admin:true,adminLog:true,response,catPage:true});
         })
     },
     postAddCategory:(req,res)=>{
@@ -219,10 +219,9 @@ module.exports = {
             res.json(false)
         }
     },
-    unlistCategory:(req,res)=>{
-        let categoryId = req.query.id
-        productHelpers.unlistCategory(categoryId).then(()=>{
-            res.redirect('/admin/category-management')
+    listUnlistCategory:(req,res)=>{
+        productHelpers.unlistListCategory(req.query).then(()=>{
+            res.json({status:true})
         })
     },
     listCategory:(req,res)=>{
@@ -233,18 +232,17 @@ module.exports = {
     },
     getOrderManagement:(req,res)=>{
         adminHelpers.adminOrdersList().then((orders)=>{
-            res.render('admin/orders', { title: 'BigShopper Admin',admin:true,adminLog:true,orders});
+            res.render('admin/orders', { title: 'BigShopper Admin',admin:true,adminLog:true,orders,orderPage:true});
         })
     },
     getVieworder:(req,res)=>{
         userHelpers.orderDetails(req.query.id).then((order)=>{
-            res.render('admin/viewOrder',{title: 'BigShopper Admin',admin:true,adminLog:true,order})
+            res.render('admin/viewOrder',{title: 'BigShopper Admin',admin:true,adminLog:true,order,orderPage:true})
         })
     },
     changeStatus:(req,res)=>{
         userHelpers.changeOrderStatus(req.query.id,req.body).then(()=>{
             res.json({status:true})
-            // res.redirect('/admin/viewOrderDetails')
         })
     },
     getSalesReport:(req,res)=>{
@@ -252,13 +250,13 @@ module.exports = {
             if(req.query.fromDate){
                 res.json(orders)
             }else{
-                res.render('admin/sales-report',{ title: 'BigShopper Admin',admin:true,adminLog:true,orders})
+                res.render('admin/sales-report',{ title: 'BigShopper Admin',admin:true,adminLog:true,orders,dashPage:true})
             }
         })
     },
     getCouponManagement:(req,res)=>{
         adminHelpers.getCouponsPage().then((coupons)=>{
-            res.render('admin/coupons', { title: 'BigShopper Admin',admin:true,adminLog:true,coupons});
+            res.render('admin/coupons', { title: 'BigShopper Admin',admin:true,adminLog:true,coupons,couponPage:true});
         })
     },
     addCoupon:async(req,res)=>{

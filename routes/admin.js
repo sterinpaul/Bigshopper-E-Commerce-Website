@@ -73,7 +73,7 @@ router.get('/edit-category/',authenticate.adminAuth,adminController.getEditCateg
 router.post('/edit-category',authenticate.adminAuth,adminController.postEditCategory)
 
 /* Unlist a Category. */
-router.get('/unlist-category/',authenticate.adminAuth,adminController.unlistCategory)
+router.get('/listUnlist-category',authenticate.adminAuth,adminController.listUnlistCategory)
 
 /* Add to list Category. */
 router.get('/addToList-category/',authenticate.adminAuth,adminController.listCategory)

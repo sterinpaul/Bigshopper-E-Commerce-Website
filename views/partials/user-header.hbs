@@ -13,16 +13,16 @@
 					<div class="menu-desktop">
 						<ul class="main-menu">
 							<li>
-								<a href='/'>Home</a>
+								<a href='/' class="{{#if hPage}}active{{/if}}">Home</a>
 							</li>
 
 							<li>
-								<a href="/products">Shop</a>
+								<a href="/products" class="{{#if proPage}}active{{/if}}">Shop</a>
 							</li>
 
 							{{#if userName}}
 							<li>
-								<a href="/cart">Cart</a>
+								<a href="/cart" class="{{#if cartPage}}active{{/if}}">Cart</a>
 							</li>
 							{{/if}}
 							{{!-- <li>

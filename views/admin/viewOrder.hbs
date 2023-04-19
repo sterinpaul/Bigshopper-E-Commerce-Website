@@ -133,8 +133,13 @@
                                                         <dd> ₹ <span id="viewOrderShippingCost">0.00</dd>
                                                     </dl>
                                                     <dl class="dlist" style="display:flex;justify-content: space-between;">
+                                                        {{#if order.discount}}
+                                                        <dt>Coupon Discount:<span class="text-success">({{order.couponCode}})</span></dt>
+                                                        <dd> ₹{{order.discount}}</dd>
+                                                        {{else}}
                                                         <dt>Coupon Discount:</dt>
-                                                        <dd> ₹ {{order.discount}}</dd>
+                                                        <dd> ₹ 0.00</dd>
+                                                        {{/if}}
                                                     </dl>
                                                     <dl class="dlist" style="display:flex;justify-content: space-between;">
                                                         <dt>Grand total:</dt>
@@ -204,7 +209,7 @@
 
 
     <script>
-        document.getElementById('viewOrderGrandTotal').innerText = parseInt(document.getElementById('viewOrderShippingCost').innerText) + {{order.total}}
+        document.getElementById('viewOrderGrandTotal').innerText = parseInt(document.getElementById('viewOrderShippingCost').innerText) + {{order.subTotal}}
         {{!-- let orderCancellation = '{{order.orderStatus}}';
         if(orderCancellation == 'Cancelled'){
             document.getElementById('statusContainer').style.display = 'none'

@@ -109,6 +109,6 @@ router.get('/editAddress',authenticate.userAuth,controller.editAddress)
 router.post('/editAddress',authenticate.userAuth,controller.editAddressPosting)
 
 // Delete one Address
-router.get('/deleteAddress/',authenticate.userAuth,controller.deleteAnAddress)
+router.get('/deleteAddress',authenticate.userAuth,controller.deleteAnAddress)
 
 module.exports = router;

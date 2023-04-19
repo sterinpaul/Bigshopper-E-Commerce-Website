@@ -20,9 +20,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link" id="address-tab" href="/addresses" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
                                         </li>
-                                        <li class="nav-item">
+                                        {{!-- <li class="nav-item">
                                             <a class="nav-link" id="account-detail-tab" href="/profile" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>My Account</a>
-                                        </li>
+                                        </li> --}}
                                     </ul>
                                 </div>
                             </div>
@@ -37,7 +37,7 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="table-responsive">
-                                                    <table class="table">
+                                                    <table class="table" id="address-table">
                                                         <thead>
                                                             <tr>
                                                                 <th>No.</th>
@@ -60,8 +60,8 @@
                                                                     {{this.mobileNo}}
                                                                 </td>
                                                                 <td>
-                                                                    <a href="/editAddress?id={{this.id}}&order=address" class="btn btn-primary d-block m-b-4">Edit</a>
-                                                                    <a href="/deleteAddress?id={{this.id}}" onclick="return confirm(`Do you want to delete the address ?`)" class="btn btn-danger d-block">Delete</a>
+                                                                    <a style="width:5rem;" href="/editAddress?id={{this.id}}&order=address" class="btn btn-primary m-b-4">Edit</a>
+                                                                    <button style="width:5rem;" onclick="deleteAddress('{{this.id}}')" class="btn btn-danger d-block">Delete</a>
                                                                 </td>
                                                             </tr>
                                                             {{/each}}
@@ -89,3 +89,36 @@
         </section>
     
     
+<script>
+
+
+    function deleteAddress(addressId){
+        swal({
+        title: "Are you sure ?",
+        text: `Do you want to remove this address ?`,
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url:'/deleteAddress',
+                type:'GET',
+                data:{
+                    id:addressId,
+                },
+                success:(response)=>{
+                    if(response.status){
+                        $(document).ready(function(){
+                            $('#address-table').load(window.location.href + ' #address-table' );
+                        })
+                    }
+                }
+            })
+        }
+      })
+    }
+
+
+</script>

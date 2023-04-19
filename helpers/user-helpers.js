@@ -123,6 +123,18 @@ module.exports = {
             })
         })
     },
+    checkingProductExist:(userId,proId)=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collection.USER_COLLECTION).findOne({_id:objectId(userId),'cart._id':objectId(proId)}).then((response)=>{
+                if(response == null){
+                    response = true
+                }else{
+                    response = false
+                }
+                resolve(response)
+            })
+        })
+    },
     getAddress:(userId)=>{
         return new Promise(async(resolve,reject)=>{
             await db.get().collection(collection.USER_COLLECTION).findOne({_id:objectId(userId)}).then((response)=>{
@@ -258,6 +270,9 @@ module.exports = {
     orderSummary:(userId)=>{
         return new Promise(async(resolve,reject)=>{
             await db.get().collection(collection.ORDER_COLLECTION).find({userId:objectId(userId)}).sort({dated:-1}).toArray().then((response)=>{
+                for(let i=0;i<response.length;i++){
+                    response[i].dated = moment(response[i].dated).format('Do MMM YYYY')
+                }
                 resolve(response)
             })
         })

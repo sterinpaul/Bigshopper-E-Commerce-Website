@@ -9,9 +9,9 @@ module.exports = {
         if(req.session.user){
             var userName = req.session.user.fName;
             let cartCount = req.session.user.cart.length
-            res.render('user/index',{title: 'BigShopper',userLog,userName,cartCount})
+            res.render('user/index',{title: 'BigShopper',userLog,userName,cartCount,hPage:true})
         }else{
-            res.render('user/index',{title: 'BigShopper',userLog})
+            res.render('user/index',{title: 'BigShopper',userLog,hPage:true})
         }
     },
     getSignin:(req,res)=>{
@@ -107,9 +107,9 @@ module.exports = {
                     userName = req.session.user.fName;
                     cartCount = req.session.user.cart.length
             
-                    res.render('user/products',{title: 'BigShopper',userLog,userName,products,itemAddedToCart:req.session.itemAdded,categoryData,cartCount,qty})
+                    res.render('user/products',{title: 'BigShopper',userLog,userName,products,itemAddedToCart:req.session.itemAdded,categoryData,cartCount,qty,proPage:true})
                 }else{
-                    res.render('user/products',{title: 'BigShopper',userLog,products,categoryData,qty})
+                    res.render('user/products',{title: 'BigShopper',userLog,products,categoryData,qty,proPage:true})
                 }
             }else{
                 res.json([products,qty])
@@ -139,16 +139,17 @@ module.exports = {
         if(req.session.user){
             userName = req.session.user.fName;
             cartCount = req.session.user.cart.length
-            res.render('user/quick_view-product',{ title: 'BigShopper',userLog,userName,product,cartCount})
+            let proNoExist = await userHelpers.checkingProductExist(req.session.user._id,req.query.id)
+            res.render('user/quick_view-product',{ title: 'BigShopper',userLog,userName,product,cartCount,proPage:true,proNoExist})
         }else{
-            res.render('user/quick_view-product',{ title: 'BigShopper',userLog,product})
+            res.render('user/quick_view-product',{ title: 'BigShopper',userLog,product,proPage:true,proNoExist:true})
         }
     },
     getCartPage:(req,res)=>{
         userName = req.session.user.fName;
         cartCount = req.session.user.cart.length
         productHelpers.getCart(req.session.user._id).then((user)=>{
-            res.render('user/cart',{title: 'BigShopper',userLog,userName,user,cartCount})
+            res.render('user/cart',{title: 'BigShopper',userLog,userName,user,cartCount,cartPage:true})
         })
     },
     postAddToCart:async(req,res)=>{
@@ -330,7 +331,7 @@ module.exports = {
     },
     deleteAnAddress:(req,res)=>{
         userHelpers.deleteAccountAddress(req.session.user._id,req.query.id).then(()=>{
-            res.redirect('/addresses')
+            res.json({status:true})
         })
     },
     couponValidation:async(req,res)=>{

@@ -78,10 +78,10 @@
                   <a href="/admin/edit-product?id={{this._id}}" class="btn btn-primary" style="width:4rem;">Edit</a>
 
                   {{#if this.listed}}
-                  <button class="btn btn-danger m-1" style="width:4rem;"
+                  <button class="btn btn-info m-1" style="width:4rem;"
                     onclick="productListUnlist('{{this._id}}','false')">Unlist</button>
                   {{else}}
-                  <button class="btn btn-warning m-1" style="width:4rem;"
+                  <button class="btn btn-info m-1" style="width:4rem;"
                     onclick="productListUnlist('{{this._id}}','true')">List</button>
                   {{/if}}
                 </td>
@@ -147,10 +147,10 @@
                   <a href="/admin/edit-product?id=${response[0][i]._id}" class="btn btn-primary" style="width:4rem;">Edit</a>
 
                   {{#if '${response[0][i].listed}'}}
-                  <button class="btn btn-danger m-1" style="width:4rem;"
+                  <button class="btn btn-info m-1" style="width:4rem;"
                     onclick="productListUnlist('${response[0][i]._id}','false')">Unlist</button>
                   {{else}}
-                  <button class="btn btn-warning m-1" style="width:4rem;"
+                  <button class="btn btn-info m-1" style="width:4rem;"
                     onclick="productListUnlist('${response[0][i]._id}','true')">List</button>
                   {{/if}}
                 </td>

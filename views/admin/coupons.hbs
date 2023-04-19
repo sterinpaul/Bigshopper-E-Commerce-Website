@@ -58,15 +58,15 @@
                             </td>
                             <td class="d-flex flex-column">
                                 <div>
-                                    <button class="btn btn-primary m-1" onclick="editCoupon('{{this._id}}')">Edit</button>
+                                    <button class="btn btn-primary m-1" style="width:5rem;" onclick="editCoupon('{{this._id}}')">Edit</button>
                                 </div>
                                 {{#if this.listed}}
                                 <div>
-                                    <button class="btn btn-secondary m-1" style="width:5rem" onclick="couponBlockUnblock('false','{{this._id}}')" id="deleteBtnUnlist">Block</button>
+                                    <button class="btn btn-secondary" style="width:5rem" onclick="couponBlockUnblock('false','{{this._id}}')" id="deleteBtnUnlist">Block</button>
                                 </div>
                                 {{else}}
                                 <div>
-                                    <button class="btn btn-info m-1" style="width:5rem" onclick="couponBlockUnblock('true','{{this._id}}')" id="deleteBtnList">Unblock</button>
+                                    <button class="btn btn-info" style="width:5rem" onclick="couponBlockUnblock('true','{{this._id}}')" id="deleteBtnList">Unblock</button>
                                 </div>
                                 {{/if}}
                             </td>
@@ -281,7 +281,7 @@ function couponBlockUnblock(status,couponId){
     }
     swal({
     title: "Are you sure?",
-    text: `Do you want to ${list} this coupon?`,
+    text: `Do you want to ${list} this coupon ?`,
     {{!-- icon: "warning", --}}
     buttons: true,
     dangerMode: true,
