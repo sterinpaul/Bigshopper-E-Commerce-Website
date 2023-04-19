@@ -95,7 +95,9 @@ module.exports = {
         let category = req.query.category
         let skip = req.query.skip
         
-        productHelpers.getAllProducts(category,skip).then((response)=>{
+        productHelpers.getAllProducts(category,skip).then(async(response)=>{
+            let categoryData = await productHelpers.getAllCategories()
+            categoryData = categoryData.category
             
             let products = response[0]
             let qty = response[1]
@@ -105,9 +107,9 @@ module.exports = {
                     userName = req.session.user.fName;
                     cartCount = req.session.user.cart.length
             
-                    res.render('user/products',{title: 'BigShopper',userLog,userName,products,itemAddedToCart:req.session.itemAdded,cartCount,qty})
+                    res.render('user/products',{title: 'BigShopper',userLog,userName,products,itemAddedToCart:req.session.itemAdded,categoryData,cartCount,qty})
                 }else{
-                    res.render('user/products',{title: 'BigShopper',userLog,products,qty})
+                    res.render('user/products',{title: 'BigShopper',userLog,products,categoryData,qty})
                 }
             }else{
                 res.json([products,qty])

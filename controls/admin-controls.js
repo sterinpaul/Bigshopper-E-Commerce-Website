@@ -74,18 +74,25 @@ module.exports = {
     },
     unBlockUser:(req,res)=>{
         let proId = req.query.id
-        // if(req.session.admin){
-            userHelpers.unBlockUser(proId).then((response)=>{
-                res.redirect('/admin/user-management')
-            })
-        // }else{
-            // res.redirect('/admin');
-        // }
+        userHelpers.unBlockUser(proId).then((response)=>{
+            res.redirect('/admin/user-management')
+        })
     },
     getProductManagement:(req,res)=>{
-        productHelpers.getAllProducts().then((response)=>{
+        let category = req.query.category
+        let skip = req.query.skip
+
+        adminHelpers.getAllProducts(category,skip).then(async(response)=>{
+            let categoryData = await productHelpers.getAllCategories()
+            categoryData = categoryData.category
+
             products = response[0]
-            res.render('admin/products', { title: 'BigShopper Admin',admin:true,adminLog:true,products});
+            let qty = response[1]
+            if(category === undefined){
+                res.render('admin/products', { title: 'BigShopper Admin',admin:true,adminLog:true,products,categoryData,qty});
+            }else{
+                res.json([products,qty])
+            }
         })
     },
     getAddProduct:(req,res)=>{
@@ -106,25 +113,20 @@ module.exports = {
             res.redirect('/admin/product-management')
         })
     },
-    unlistProduct:(req,res)=>{
-        let proId = req.query.id
-        // if(req.session.admin){
-            productHelpers.unlistProduct(proId).then((response)=>{
-                res.redirect('/admin/product-management')
-            })
-        // }else{
-            // res.redirect('/admin');
-        // }
+    listUnlistProduct:(req,res)=>{
+        if(req.query.status == 'true'){
+            req.query.status = true
+        }else{
+            req.query.status = false
+        }
+        productHelpers.listUnlistProduct(req.query).then(()=>{
+            res.json({status:true})
+        })
     },
     listProduct:(req,res)=>{
-        let proId = req.query.id
-        // if(req.session.admin){
-            productHelpers.addToListProduct(proId).then((response)=>{
-                res.redirect('/admin/product-management')
-            })
-        // }else{
-            // res.redirect('/admin');
-        // }
+        productHelpers.addToListProduct(req.query.id).then(()=>{
+            res.redirect('/admin/product-management')
+        })
     },
     getEditProduct:async(req,res)=>{
         let product = await productHelpers.getProductDetails(req.query.id)

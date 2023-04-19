@@ -43,10 +43,10 @@ router.get('/add-product',authenticate.adminAuth,adminController.getAddProduct);
 router.post('/add-product',authenticate.adminAuth,imgUpload.uploads,adminController.postAddProduct);
 
 /* Unlist a product. */
-router.get('/unlist-product/',authenticate.adminAuth,adminController.unlistProduct)
+router.get('/listUnlist-product',authenticate.adminAuth,adminController.listUnlistProduct)
 
 /* Add to list a product. */
-router.get('/addToList-product/',authenticate.adminAuth,adminController.listProduct)
+router.get('/addToList-product',authenticate.adminAuth,adminController.listProduct)
 
 /* GET Edit product page. */
 router.get('/edit-product/',authenticate.adminAuth,adminController.getEditProduct)

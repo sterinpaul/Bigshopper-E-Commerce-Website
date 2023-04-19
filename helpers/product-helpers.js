@@ -80,17 +80,18 @@ module.exports = {
             })
         })
     },
-    unlistProduct:(proId)=>{
+    listUnlistProduct:(proData)=>{
         return new Promise(async(resolve,reject)=>{
-            await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objectId(proId)},{$set:{listed:false}}).then((response)=>{
-                resolve(response)
+            console.log(proData);
+            await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objectId(proData.id)},{$set:{listed:(proData.status)}}).then(()=>{
+                resolve()
             })
         })
     },
     addToListProduct:(proId)=>{
         return new Promise(async(resolve,reject)=>{
-            await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objectId(proId)},{$set:{listed:true}}).then((response)=>{
-                resolve(response)
+            await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objectId(proId)},{$set:{listed:true}}).then(()=>{
+                resolve()
             })
         })
     },
