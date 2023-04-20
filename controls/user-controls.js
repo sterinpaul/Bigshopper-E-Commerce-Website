@@ -153,20 +153,38 @@ module.exports = {
         })
     },
     postAddToCart:async(req,res)=>{
-        req.body.qty = parseInt(req.body.qty)
-        await productHelpers.addToCart(req.session.user._id,req.query.id,req.body.qty).then((response)=>{
-            if(response.cartCount){
-                req.session.user.cart.length = response.cartCount
+        if(req.session.user){
+            req.body.qty = parseInt(req.body.qty)
+            let stock = await productHelpers.stockChecking(req.query.id)
+            let cartQty = 0
+            if(req.session.user.cart.length){
+                cartQty = await productHelpers.cartChecking(req.session.user._id,req.query.id)
             }
-            res.json({status:true})
-        })
+            if(stock < (req.body.qty + cartQty)){
+                res.json({status:false,qty:stock})
+            }else{
+                await productHelpers.addToCart(req.session.user._id,req.query.id,req.body.qty).then((response)=>{
+                    if(response.cartCount){
+                        req.session.user.cart.length = response.cartCount
+                    }
+                    res.json({status:true})
+                })
+            }
+        }else{
+            res.json({noLogin:true})
+        }
     },
     updateQuantity:async(req,res)=>{
         let quantity = parseInt(req.body.qty)
-        productHelpers.updateCart(req.session.user._id,req.body.id,quantity).then(async ()=>{
-            let total = await productHelpers.getCart(req.session.user._id)
-            res.json(total.sum)
-        })
+        let stock = await productHelpers.stockChecking(req.body.id)
+        if(stock < req.body.qty){
+            res.json({status:false,stock:stock})
+        }else{
+            productHelpers.updateCart(req.session.user._id,req.body.id,quantity).then(async ()=>{
+                let total = await productHelpers.getCart(req.session.user._id)
+                res.json({status:true,sum:total.sum})
+            })
+        }
     },
     deleteCartProduct:(req,res)=>{
         productHelpers.deleteProduct(req.session.user._id,req.query.id).then(async (response)=>{
@@ -211,23 +229,32 @@ module.exports = {
         })
     },
     postOrder:async(req,res)=>{
-        req.body.orderId = ObjectId()
-        req.body.subTotal = parseInt(req.body.subTotal)
-        req.body.discount = parseInt(req.body.discount)
-        req.body.total = parseInt(req.body.total)
-        
-        if(req.body.paymentOption == 'COD'){
-            await userHelpers.orderCreation(req.session.user._id,req.body).then(async(response)=>{
-                req.session.user.cart.length = null
-                cartCount = req.session.user.cart.length
-                response.COD_status = true
-                res.json(response)
-            })
-        }else if(req.body.paymentOption == 'RazorPay'){
-            await userHelpers.getRazorpay(req.body).then((response)=>{
-                response.RAZORPAY_status = true
-                res.json(response)
-            })
+        let noStock = await productHelpers.cartStockChecking(req.session.user._id)
+        if(noStock.length){
+            let message = ''
+            for(let i=0;i<noStock.length;i++){
+                message += noStock[i].name +' : Available qty. '+ noStock[i].qty+' , '
+            }
+            res.json({status:message})
+        }else{
+            req.body.orderId = ObjectId()
+            req.body.subTotal = parseInt(req.body.subTotal)
+            req.body.discount = parseInt(req.body.discount)
+            req.body.total = parseInt(req.body.total)
+            
+            if(req.body.paymentOption == 'COD'){
+                await userHelpers.orderCreation(req.session.user._id,req.body).then(async(response)=>{
+                    req.session.user.cart.length = null
+                    cartCount = req.session.user.cart.length
+                    response.COD_status = true
+                    res.json(response)
+                })
+            }else if(req.body.paymentOption == 'RazorPay'){
+                await userHelpers.getRazorpay(req.body).then((response)=>{
+                    response.RAZORPAY_status = true
+                    res.json(response)
+                })
+            }
         }
     },
     verificationForPayment:(req,res)=>{

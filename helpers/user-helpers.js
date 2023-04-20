@@ -200,9 +200,11 @@ module.exports = {
             await db.get().collection(collection.ORDER_COLLECTION).insertOne({_id:(cartDetails.orderId),userId:objectId(userId),userName:username,products:cart,subTotal:(cartDetails.subTotal),couponCode:(cartDetails.couponCode),discount:(cartDetails.discount),total:(cartDetails.total),address:address,dated: new Date(),modeOfPayment:(cartDetails.paymentOption),orderStatus:"Processing"}).then(async (response)=>{
                 
                 // Add Coupon code to user collection
-                await db.get().collection(collection.USER_COLLECTION).updateOne({_id:objectId(userId)},{$addToSet:{usedCoupons:(cartDetails.couponCode)}})
+                if(cartDetails.couponCode !== ''){
+                    await db.get().collection(collection.USER_COLLECTION).updateOne({_id:objectId(userId)},{$addToSet:{usedCoupons:(cartDetails.couponCode)}})
+                }
 
-                // Updating product sale count
+                // Updating product sale count & Quantity
                 let items = cart.map(product=>{return {_id:product._id , quantity:product.quantity}})
                 for(let i=0;i<items.length;i++){
                     await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:(items[i]._id)},{$inc:{quantity:-(items[i].quantity),count:(items[i].quantity)}})

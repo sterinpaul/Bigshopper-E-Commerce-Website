@@ -39,7 +39,7 @@ module.exports = {
             }
         })
     },
-        searchKeyByName:(category=0,keyWord)=>{
+    searchKeyByName:(category=0,keyWord)=>{
         return new Promise (async(resolve,reject)=>{
             const regex = new RegExp(keyWord, 'i');
             if(category == 'All Products' || category == 0){
@@ -52,6 +52,64 @@ module.exports = {
                 let searchResult = await db.get().collection(collection.PRODUCT_COLLECTION).find({category:category,name:{$regex:regex}}).toArray()
                 resolve(searchResult)
             }
+        })
+    },
+    stockChecking:(proId)=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collection.PRODUCT_COLLECTION).findOne({_id:objectId(proId)}).then((response)=>{
+                if(response){
+                    response = response.quantity
+                }else{
+                    response = 0
+                }
+                resolve(response)
+            })
+        })
+    },
+    cartChecking:(userId,proId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let cartProduct = await db.get().collection(collection.USER_COLLECTION).find({_id:objectId(userId),'cart._id':objectId(proId)}).project({_id:0,'cart.$':1}).next()
+            let cartQty = 0;
+            if(cartProduct){
+                cartQty = cartProduct.cart[0].quantity
+            }
+            resolve(cartQty)
+        })
+    },
+    cartStockChecking:(userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            const cartData = await db.get().collection(collection.USER_COLLECTION).aggregate([
+                {
+                  $match: {
+                    _id: objectId(userId),
+                  },
+                },
+                {
+                  $unwind: {
+                    path: "$cart",
+                  },
+                },
+                {
+                  $project: {
+                    _id: 0,
+                    _id: "$cart._id",
+                    quantity: "$cart.quantity",
+                  },
+                },
+            ]).toArray()
+            
+
+            let checkedArray = [];
+            for(let i=0;i < cartData.length;i++){
+                await db.get().collection(collection.PRODUCT_COLLECTION).findOne({_id:objectId(cartData[i]._id),quantity:{$lt:(cartData[i].quantity)}}).then((data)=>{
+                    if(data){
+                        checkedArray.push({name:data.name,qty:data.quantity})
+                    }
+                })
+            }
+            console.log('checkedArray',checkedArray);
+
+            resolve(checkedArray)
         })
     },
     getAllProductsMen:()=>{

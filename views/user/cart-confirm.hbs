@@ -248,20 +248,28 @@ function placeOrder(event){
         type:'POST',
         data:$('#formOrder').serialize()+'&subTotal='+subTotal+'&couponCode='+coupon+'&discount='+discount+'&total='+cartTotal,
         success:(response)=>{
-            if(response.COD_status){
+            if(response.status){
                 swal({
-                    title: "Order placed Successful",
-                    text: "Order id:"+response.insertedId
+                    title: `Out of stock`,
+                    text: `These Products are Out of stock
+                            ${response.status}`
                 })
-                location.href = "/view-order?id="+response.insertedId
-            }else if(response.RAZORPAY_status){
-                getRazorpay(response)
+            }else{
+                if(response.COD_status){
+                    swal({
+                        title: "Order placed Successful",
+                        text: "Order id:"+response.insertedId
+                    })
+                    location.href = "/view-order?id="+response.insertedId
+                }else if(response.RAZORPAY_status){
+                    getRazorpay(response)
+                }
             }
         },
         error : (response)=>{
             console.log(response);
             location.href = "/cart"
-        } 
+        }
     })
     {{else}}
     swal("Please add an address");

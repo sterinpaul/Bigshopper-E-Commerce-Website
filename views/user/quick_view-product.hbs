@@ -118,9 +118,15 @@
 													<i class="fs-16 zmdi zmdi-plus"></i>
 												</div>
 											</div>
-											<button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" value="{{product._id}}" id="quickViewAddToCart" onclick="confirmAddToCart(event)">
-											Add to cart
-											</button>
+												{{#if userName}}
+												<button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" value="{{product._id}}" id="quickViewAddToCart" onclick="confirmAddToCart(event)">
+												Add to cart
+												</button>
+												{{else}}
+												<a href="/signin" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+												Add to cart
+												</a>
+												{{/if}}
 											{{else}}				
 											<a href="/cart" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
 											View cart
@@ -129,6 +135,7 @@
 										</div>
 									</div>
 								</form>
+								
 							</div>
 						</div>
 					</div>
@@ -155,18 +162,31 @@
 					url:'/addToCart?id='+id,
 					type:'POST',
 					data:$('#formForQuickAdd').serialize(),
-					success:()=>{
-						{{!-- swal("Added!", "Product added to cart !", "success"); --}}
-
-						$(document).ready(function(){
-                			$('#cartChange').load(window.location.href + ' #cartChange' );
-							$('#cartChangeM').load(window.location.href + ' #cartChangeM' );
-							$('#addToContainer').load(window.location.href + ' #addToContainer' );
-              			})
+					success:(response)=>{
+						console.log('sdjhc',response)
+						if(response.noLogin){
+							swal( "Please Login !!", "warning");
+							window.location.href='/'
+						}else{
+							if(response.status){
+								swal("Added!", "Product added to cart !", "success");
+								$(document).ready(function(){
+                					$('#cartChange').load(window.location.href + ' #cartChange' );
+									$('#cartChangeM').load(window.location.href + ' #cartChangeM' );
+									$('#addToContainer').load(window.location.href + ' #addToContainer' );
+              					})
+							}else{
+								if(response.qty){
+									swal("Sorry !", `Only ${response.qty} item remaining in stock !` , "warning");
+								}else{
+									swal("Sorry !", "Product is out of stock", "warning");
+								}
+							}
+						}
 					}
 				})
   			}
-		});
+		})
 	}
   		
 

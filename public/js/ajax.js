@@ -13,10 +13,15 @@ function decreaseCount(proId){
                 id:proId,
                 qty:quantity
             },
-            success:(total)=>{
+            success:(response)=>{
+              if(response.status){
+                document.getElementById('plus-'+proId).classList.add('btn-num-product-up','hov-btn3','flex-c-m')
+                document.getElementById('plusBtn-'+proId).classList.add('fs-16','zmdi','zmdi-plus')
+                document.getElementById('warn-'+proId).innerText = '';
                 document.getElementById('qty-'+proId).innerText = quantity+' x';
                 document.getElementById('total-'+proId).innerText = Math.round(quantity * document.getElementById('price-'+proId).innerText * 100)/100
-                document.getElementById('cartTotal').innerText = total
+                document.getElementById('cartTotal').innerText = response.sum
+              }
             }
         })
     }
@@ -35,10 +40,18 @@ function increaseCount(proId){
             id:proId,
             qty:quantity
         }
-    }).done((total) =>{
+    }).done((response) =>{
+      if(response.status){
+        document.getElementById('warn-'+proId).innerText = '';
         document.getElementById('qty-'+proId).innerText = quantity+' x';
         document.getElementById('total-'+proId).innerText = Math.round(quantity * document.getElementById('price-'+proId).innerText * 100)/100
-        document.getElementById('cartTotal').innerText = total
+        document.getElementById('cartTotal').innerText = response.sum
+      }else{
+        document.getElementById('quantity-'+proId).value = quantity-1;
+        document.getElementById('plus-'+proId).classList.remove('btn-num-product-up','hov-btn3','flex-c-m','fs-16','zmdi','zmdi-plus')
+        document.getElementById('plusBtn-'+proId).classList.remove('fs-16','zmdi','zmdi-plus')
+        document.getElementById('warn-'+proId).innerText = `${response.stock} item in stock`;
+      }
     }).fail((err) =>{ 
     })
 }

@@ -46,7 +46,7 @@ router.get('/products-women',controller.getProductsWomen)
 router.get('/quick_view-product/',controller.getQuickViewProduct)
 
 /* GET Add to Cart page. */
-router.post('/addToCart/',authenticate.userAuth,controller.postAddToCart)
+router.post('/addToCart',authenticate.userAuth,controller.postAddToCart)
 
 // GET Cart Page
 router.get('/cart',authenticate.userAuth,controller.getCartPage)
