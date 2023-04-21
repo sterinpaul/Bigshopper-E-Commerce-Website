@@ -275,6 +275,12 @@ table tr td{
   color: blue;
 }
 
+.active{
+  background-color: rgb(93, 117, 235);
+  color:white;
+}
+
+
 
 
 

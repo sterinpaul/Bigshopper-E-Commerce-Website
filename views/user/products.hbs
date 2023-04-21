@@ -126,7 +126,7 @@
 				</a>
 			</div> --}}
 
-			<div>
+			<div class="p-2">
 				<nav aria-label="Page navigation example">
 				  <ul class="pagination d-flex justify-content-center" id="paginationContainer">
 				    {{!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li> --}}
@@ -155,7 +155,7 @@
 	let paginationContainer = `<li class="page-item"><a class="page-link" href="#">Previous</a></li>`
 	
 	for(let i=0;i<({{qty}}/8);i++){
-		paginationContainer += `<li onclick="shopCategorySelect(${i})" class="page-item page-link">${i+1}</li>`
+		paginationContainer += `<li onclick="shopCategorySelect(${i})" id="${i+1}" class="page-link">${i+1}</li>`
 	}
 	paginationContainer += `<li class="page-item"><a class="page-link" href="#">Next</a></li>`
 
@@ -231,10 +231,6 @@
 										<img class="icon-heart1 dis-block trans-04" style="width:30px;height:30px;" src="images/icons/addtocart.png" alt="ICON">
 										<img class="icon-heart2 ab-t-l" style="width:30px;height:30px;" src="images/icons/addtocart.png" alt="ICON">
 									</button>
-									<a href="" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2 m-t-6 m-l-10">
-										<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-										<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-									</a>
 								</div>
 	
 							</div>
@@ -244,16 +240,18 @@
                 }
 				document.getElementById('shopProductContainer').innerHTML = reloadingHtml
 
-				if(skipNo == '0'){
+				
 					let paginationContainer = `<li class="page-item"><a class="page-link" href="">Previous</a></li>`
 					
 					for(let i=0;i<(response[1]/8);i++){
-						paginationContainer += `<li onclick="shopCategorySelect(${i})" class="page-item page-link">${i+1}</li>`
+						paginationContainer += `<li onclick="shopCategorySelect(${i})" id="${i}" class="page-item page-link">${i+1}</li>`
+						console.log('skip',skipNo,i,typeof response[2])
 					}
 					paginationContainer += `<li class="page-item"><a class="page-link" href="">Next</a></li>`
 
 					document.getElementById('paginationContainer').innerHTML = paginationContainer;
-				}
+				console.log('kdcbh',paginationContainer)
+				
 			}
 		})
 		

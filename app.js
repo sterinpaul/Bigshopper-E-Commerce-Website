@@ -61,13 +61,18 @@ Handlebars.registerHelper('ifvalue', function(v1, v2, options) {
   return options.inverse(this);
 });
 
-Handlebars.registerHelper('isEqual', function(value1, value2, options) {
-  if (value1 === value2) {
-    return options.fn(this);
-  } else {
-    return options.inverse(this);
-  }
+Handlebars.registerHelper('ifeq', function (a, b, options) {
+  if (a == b) { return options.fn(this); }
+  return options.inverse(this);
 });
+
+// Handlebars.registerHelper('isEqual', function(value1, value2, options) {
+//   if (value1 === value2) {
+//     return options.fn(this);
+//   } else {
+//     return options.inverse(this);
+//   }
+// });
 
 
 // Multiplication Helper
