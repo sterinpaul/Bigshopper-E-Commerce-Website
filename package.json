@@ -1,7 +1,6 @@
 {
   "name": "first-project",
   "version": "0.0.0",
-  "private": true,
   "scripts": {
     "start": "nodemon ./bin/www"
   },
