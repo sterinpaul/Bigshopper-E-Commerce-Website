@@ -32,7 +32,7 @@ module.exports = {
         let categoryData = await adminHelpers.getCategorywiseData()
 
         let avgMonthSale = Math.round(totalSales?.totalSales.total/totalSales?.totalSales.months)
-        let productsCount = categoryData?.categoryData[0]?.categoryData[0].totalNum + categoryData?.categoryData[0]?.categoryData[1].totalNum
+        let productsCount = categoryData?.categoryData[0]?.categoryData[0].totalNum + categoryData?.categoryData[1]?.categoryData[1].totalNum
         res.render('admin/dashboard', { title: 'BigShopper Admin',admin:true,adminLog:true,totalSales,categoryData,productsCount,avgMonthSale,monthlySales,dashPage:true});
     },
     adminSignout:(req,res)=>{
