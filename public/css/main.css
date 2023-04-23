@@ -280,6 +280,25 @@ table tr td{
   color:white;
 } */
 
+#searchByInput{
+  position: relative;
+}
+
+#searchResultContainer{
+  position: absolute;
+  text-indent: 1rem;
+  min-width:25rem;
+  display:flex;
+  flex-flow: column;
+  z-index: 1;
+  background-color: white;
+  overflow:hidden;
+}
+
+#searchResultContainer a:hover{
+  background-color: rgb(221, 220, 220);
+}
+
 
 
 

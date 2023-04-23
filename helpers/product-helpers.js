@@ -43,13 +43,13 @@ module.exports = {
         return new Promise (async(resolve,reject)=>{
             const regex = new RegExp(keyWord, 'i');
             if(category == 'All Products' || category == 0){
-                let searchResult = await db.get().collection(collection.PRODUCT_COLLECTION).find({name:{$regex:regex}}).toArray()
+                let searchResult = await db.get().collection(collection.PRODUCT_COLLECTION).find({$or:[{name:{$regex:regex}},{brand:{$regex:regex}}]}).limit(5).toArray()
                 resolve(searchResult)
             }else if(category === 'Top Selling'){
-                let searchResult = await db.get().collection(collection.PRODUCT_COLLECTION).find({name:{$regex:regex}}).sort({count:-1}).limit(2).toArray()
+                let searchResult = await db.get().collection(collection.PRODUCT_COLLECTION).find({$or:[{name:{$regex:regex}},{brand:{$regex:regex}}]}).sort({count:-1}).limit(5).toArray()
                 resolve(searchResult)
             }else{
-                let searchResult = await db.get().collection(collection.PRODUCT_COLLECTION).find({category:category,name:{$regex:regex}}).toArray()
+                let searchResult = await db.get().collection(collection.PRODUCT_COLLECTION).find({category:category,$or:[{name:{$regex:regex}},{brand:{$regex:regex}}]}).limit(5).toArray()
                 resolve(searchResult)
             }
         })

@@ -35,6 +35,21 @@ module.exports = {
       }
     })
   },
+  searchKeyByName:(category=0,keyWord)=>{
+    return new Promise (async(resolve,reject)=>{
+        const regex = new RegExp(keyWord, 'i');
+        if(category == 'All Products' || category == 0){
+            let searchResult = await db.get().collection(collection.PRODUCT_COLLECTION).find({$or:[{name:{$regex:regex}},{brand:{$regex:regex}}]}).limit(5).toArray()
+            resolve(searchResult)
+        }else if(category === 'Top Selling'){
+            let searchResult = await db.get().collection(collection.PRODUCT_COLLECTION).find({$or:[{name:{$regex:regex}},{brand:{$regex:regex}}]}).sort({count:-1}).limit(5).toArray()
+            resolve(searchResult)
+        }else{
+            let searchResult = await db.get().collection(collection.PRODUCT_COLLECTION).find({category:category,$or:[{name:{$regex:regex}},{brand:{$regex:regex}}]}).limit(5).toArray()
+            resolve(searchResult)
+        }
+    })
+  },
   adminOrdersList:()=>{
     return new Promise(async(resolve,reject)=>{
       let orders = await db.get().collection(collection.ORDER_COLLECTION).find().sort({dated:-1}).toArray()

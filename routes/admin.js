@@ -36,6 +36,9 @@ router.get('/unblock-user/',authenticate.adminAuth,adminController.unBlockUser)
 // Get Product page
 router.get('/product-management',authenticate.adminAuth,adminController.getProductManagement);
 
+// Search products by Name
+router.get('/searchByName',authenticate.adminAuth,adminController.searchByName)
+
 // GET Add-Product Page
 router.get('/add-product',authenticate.adminAuth,adminController.getAddProduct);
 

@@ -29,16 +29,19 @@
       </div>
 
       <!-- Search product -->
-      <div class="dis-none panel-search w-full p-t-10 p-b-15">
-        <div class="bor8 dis-flex p-l-15">
-          <button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
-            <i class="zmdi zmdi-search"></i>
-          </button>
-
-          <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search"
-            onkeyup="searchByInput()" id="searchByInput">
-        </div>
-      </div>
+				<div class="dis-none panel-search w-full p-t-10 p-b-15">
+					<div>
+						<div class="bor8 dis-flex p-l-15">
+							<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+								<i class="zmdi zmdi-search"></i>
+							</button>
+	
+							<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search" onkeyup="searchByInput()" id="searchByInput">
+						</div>	
+						<span id="searchResultContainer">	
+						</span>
+					</div>
+				</div>
     </div>
     <div>
       <div class="card-body p-0">
@@ -106,6 +109,8 @@
 
 
 <script>
+  
+  document.getElementById('searchByInput').value = '';
 
   let paginationContainer = `<li class="page-item"><a class="page-link" href="#">Previous</a></li>`
 
@@ -171,6 +176,8 @@
           paginationContainer += `<li class="page-item"><a class="page-link" href="">Next</a></li>`
 
           document.getElementById('paginationContainer').innerHTML = paginationContainer;
+          document.getElementById('searchByInput').value = ''
+          document.getElementById('searchResultContainer').innerHTML = '';
         }
       }
     })
@@ -178,22 +185,35 @@
   }
 
 
-  function searchByInput() {
-    let category = document.getElementById('shopCategorySelect').value
-    let keyWord = document.getElementById('searchByInput').value
+function searchByInput(){
+		let category = document.getElementById('shopCategorySelect').value
+		let keyWord = document.getElementById('searchByInput').value
+		
+		if(keyWord != ' ' && keyWord != ''){
+			$.ajax({
+				url:'/admin/searchByName',
+				type:'GET',
+				data:{
+					category:category,
+					keyWord:keyWord
+				},
+				success:(response)=>{
+					let searchResultContainer =''
+					for(let i=0;i<response.length;i++){
+						searchResultContainer += `
+						<a href="/admin/edit-product?id=${response[i]._id}" class="text-dark" style="padding: 0.5rem 0.75rem;">${response[i].brand} ${response[i].name}</a>
+						`
+					}
+          document.getElementById('searchResultContainer').style.border = '1px solid #e6e6e6';
+					document.getElementById('searchResultContainer').innerHTML = searchResultContainer;
+				}
+			})
 
-    $.ajax({
-      url: '/admin/searchByName',
-      type: 'GET',
-      data: {
-        category: category,
-        keyWord: keyWord
-      },
-      success: (response) => {
-        console.log('ster', response)
-      }
-    })
-  }
+		}else{
+			document.getElementById('searchResultContainer').innerHTML = '';
+      document.getElementById('searchResultContainer').style.border = 'none';
+		}
+	}
 
 
 

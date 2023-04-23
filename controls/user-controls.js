@@ -112,7 +112,7 @@ module.exports = {
                     res.render('user/products',{title: 'BigShopper',userLog,products,categoryData,qty,proPage:true})
                 }
             }else{
-                res.json([products,qty,skip])
+                res.json([products,qty])
             }
         })
     },

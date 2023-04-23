@@ -25,13 +25,17 @@
 				
 				<!-- Search product -->
 				<div class="dis-none panel-search w-full p-t-10 p-b-15">
-					<div class="bor8 dis-flex p-l-15">
-						<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
-							<i class="zmdi zmdi-search"></i>
-						</button>
-
-						<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search" onkeyup="searchByInput()" id="searchByInput">
-					</div>	
+					<div>
+						<div class="bor8 dis-flex p-l-15">
+							<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+								<i class="zmdi zmdi-search"></i>
+							</button>
+	
+							<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search" onkeyup="searchByInput()" id="searchByInput">
+						</div>	
+						<span id="searchResultContainer">	
+						</span>
+					</div>
 				</div>
 
 			</div>
@@ -152,6 +156,8 @@
 
 <script>
 
+	document.getElementById('searchByInput').value = '';
+	
 	let paginationContainer = `<li class="page-item"><a class="page-link" href="#">Previous</a></li>`
 	
 	for(let i=0;i<({{qty}}/8);i++){
@@ -245,13 +251,12 @@
 					
 					for(let i=0;i<(response[1]/8);i++){
 						paginationContainer += `<li onclick="shopCategorySelect(${i})" id="${i}" class="page-item page-link">${i+1}</li>`
-						console.log('skip',skipNo,i,typeof response[2])
 					}
 					paginationContainer += `<li class="page-item"><a class="page-link" href="">Next</a></li>`
 
 					document.getElementById('paginationContainer').innerHTML = paginationContainer;
-				console.log('kdcbh',paginationContainer)
-				
+					document.getElementById('searchByInput').value = ''
+					document.getElementById('searchResultContainer').innerHTML = '';
 			}
 		})
 		
@@ -262,18 +267,30 @@
 		let category = document.getElementById('shopCategorySelect').value
 		let keyWord = document.getElementById('searchByInput').value
 		
+		if(keyWord != ' ' && keyWord != ''){
+			$.ajax({
+				url:'/searchByName',
+				type:'GET',
+				data:{
+					category:category,
+					keyWord:keyWord
+				},
+				success:(response)=>{
+					let searchResultContainer =''
+					for(let i=0;i<response.length;i++){
+						searchResultContainer += `
+						<a href="/quick_view-product?id=${response[i]._id}" class="text-dark" style="padding: 0.5rem 0.75rem;">${response[i].brand} ${response[i].name}</a>
+						`
+					}
+					document.getElementById('searchResultContainer').style.border = '1px solid #e6e6e6';
+					document.getElementById('searchResultContainer').innerHTML = searchResultContainer;
+				}
+			})
 
-		$.ajax({
-			url:'/searchByName',
-			type:'GET',
-			data:{
-				category:category,
-				keyWord:keyWord
-			},
-			success:(response)=>{
-				console.log('ster',response)
-			}
-		})
+		}else{
+			document.getElementById('searchResultContainer').innerHTML = '';
+			document.getElementById('searchResultContainer').style.border = 'none';
+		}
 	}
 	
 
