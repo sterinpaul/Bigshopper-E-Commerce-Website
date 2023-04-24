@@ -297,6 +297,7 @@ module.exports = {
                         addressId: req.body["payment[address]"],
                         paymentOption:'RazorPay'
                     }
+                    console.log('orderData',orderData);
                     await userHelpers.orderCreation(req.session.user._id,orderData)
                 }
                 res.status(200).json(response)
