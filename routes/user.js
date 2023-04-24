@@ -45,7 +45,7 @@ router.get('/products-women',controller.getProductsWomen)
 /* GET Quick View product page. */
 router.get('/quick_view-product/',controller.getQuickViewProduct)
 
-/* GET Add to Cart page. */
+/* POST Add to Cart page. */
 router.post('/addToCart',authenticate.userAuth,controller.postAddToCart)
 
 // GET Cart Page
@@ -75,10 +75,10 @@ router.get('/order-confirm/',authenticate.userAuth,controller.getOrderConfirm)
 // Coupon Validation
 router.get('/coupon-validation',authenticate.userAuth,controller.couponValidation)
 
-// GET Order Success Page
+// Placing the order
 router.post('/order-confirm',authenticate.userAuth,controller.postOrder)
 
-// Payment Verification
+// Payment Verification - Razorpay
 router.post('/verify-payment',authenticate.userAuth,controller.verificationForPayment)
 
 // GET User Page

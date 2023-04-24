@@ -5,6 +5,7 @@ const userHelpers = require('../helpers/user-helpers')
 var userLog = true;
 
 module.exports = {
+    /* Get Index page */
     getIndex:(req,res)=>{
         if(req.session.user){
             var userName = req.session.user.fName;
@@ -14,6 +15,7 @@ module.exports = {
             res.render('user/index',{title: 'BigShopper',userLog,hPage:true})
         }
     },
+    /* Get Sign-in page */
     getSignin:(req,res)=>{
         if(req.session.user){
             res.redirect('/')
@@ -25,6 +27,7 @@ module.exports = {
             userLog = true;
         }
     },
+    /* Get OTP Sign-in page */
     getOtpSignin:(req,res)=>{
         if(req.session.user){
             res.redirect('/')
@@ -36,6 +39,7 @@ module.exports = {
             userLog = true;
         }
     },
+    // User Sign in with OTP
     postOtpSignin:(req,res)=>{
         userHelpers.sendOtp(req.body.mobile).then((response)=>{
             if(response.status){
@@ -50,6 +54,7 @@ module.exports = {
             }
         })
     },
+    /* Get Sign-up page */
     getSignup:(req,res)=>{
         if(req.session.user){
             res.redirect('/')
@@ -58,6 +63,7 @@ module.exports = {
             req.session.userExist = false;
         }
     },
+    /* POST Sign-up page */
     postSignup:(req,res)=>{
         userHelpers.doSignup(req.body).then((response)=>{
             req.session.user = response
@@ -69,6 +75,7 @@ module.exports = {
             res.redirect('/signup')
         })
     },
+    /* POST User Sign-in page */
     postSignin:(req,res)=>{
         userHelpers.dologin(req.body).then((response)=>{
             if(response.status){
@@ -86,11 +93,13 @@ module.exports = {
             }
         })
     },
+    /* Sign-out from User Page */
     signOut:(req,res)=>{
         req.session.user = null;
         userLog = false;
         res.redirect('/signin')
     },
+    /*  view Products Page */
     getProducts:(req,res)=>{
         let category = req.query.category
         let skip = req.query.skip
@@ -116,23 +125,27 @@ module.exports = {
             }
         })
     },
+    // Search products by Name
     searchByName:(req,res)=>{
         productHelpers.searchKeyByName(req.query.category,req.query.keyWord).then((response)=>{
             res.json(response)
         })
     },
+    /*  Products Men Page */
     getProductsMen:(req,res)=>{
         productHelpers.getAllProductsMen().then((products)=>{
             userName = req.session.user.fName;
             res.render('user/products-men',{title: 'BigShopper',userLog,products,userName})
         })
     },
+    /*  Products Women Page */
     getProductsWomen:(req,res)=>{
         productHelpers.getAllProductsWomen().then((products)=>{
             userName = req.session.user.fName;
             res.render('user/products-women',{title: 'BigShopper',userLog,products,userName})
         })
     },
+    /* GET Quick View product page. */
     getQuickViewProduct:async(req,res)=>{
   
         let product = await productHelpers.getProductDetails(req.query.id)
@@ -145,6 +158,7 @@ module.exports = {
             res.render('user/quick_view-product',{ title: 'BigShopper',userLog,product,proPage:true,proNoExist:true})
         }
     },
+    /* GET Add to Cart page. */
     getCartPage:(req,res)=>{
         userName = req.session.user.fName;
         cartCount = req.session.user.cart.length
@@ -152,6 +166,7 @@ module.exports = {
             res.render('user/cart',{title: 'BigShopper',userLog,userName,user,cartCount,cartPage:true})
         })
     },
+    /* POST Add to Cart page. */
     postAddToCart:async(req,res)=>{
         if(req.session.user){
             req.body.qty = parseInt(req.body.qty)
@@ -174,6 +189,7 @@ module.exports = {
             res.json({noLogin:true})
         }
     },
+    /* POST Update Quantity in cart */
     updateQuantity:async(req,res)=>{
         let quantity = parseInt(req.body.qty)
         let stock = await productHelpers.stockChecking(req.body.id)
@@ -186,6 +202,7 @@ module.exports = {
             })
         }
     },
+    /* Delete a Product from Cart */
     deleteCartProduct:(req,res)=>{
         productHelpers.deleteProduct(req.session.user._id,req.query.id).then(async (response)=>{
             let total = await productHelpers.getCart(req.session.user._id)
@@ -193,6 +210,7 @@ module.exports = {
             res.json({count:response.cartCount,total:total.sum})
         })
     },
+    // GET Select Address Page
     getSelectAddress:(req,res)=>{
         userName = req.session.user.fName;
         cartCount = req.session.user.cart.length
@@ -200,22 +218,26 @@ module.exports = {
             res.render('user/selectAddress',{title: 'BigShopper',userLog,userName,addresses,cartCount})
         })
     },
+    // GET Add Address Page
     getAddAddress:(req,res)=>{
         userName = req.session.user.fName;
         cartCount = req.session.user.cart.length
         res.render('user/addAddress',{ title: 'BigShopper',userLog,userName,cartCount})
     },
+    // POST Add Address
     postAddAddress:(req,res)=>{
         req.body.id = new ObjectId();
         userHelpers.addAddress(req.session.user._id,req.body).then(()=>{
             res.redirect('/selectAddress')
         })
     },
+    // GET Cart Checkout page
     getCartCheckOut:(req,res)=>{
         userName = req.session.user.fName;
         cartCount = req.session.user.cart.length
         res.render('user/cart-checkOut',{ title: 'BigShopper',userLog,userName,cartCount})
     },
+    // GET Order Confirmation Page
     getOrderConfirm:(req,res)=>{
         userName = req.session.user.fName;
         cartCount = req.session.user.cart.length
@@ -228,6 +250,7 @@ module.exports = {
             }
         })
     },
+    // Placing the order
     postOrder:async(req,res)=>{
         let noStock = await productHelpers.cartStockChecking(req.session.user._id)
         if(noStock.length){
@@ -257,6 +280,7 @@ module.exports = {
             }
         }
     },
+    // Payment Verification of Razorpay
     verificationForPayment:(req,res)=>{
         try{
             userHelpers.verifyPayment(req.session.user._id,req.body).then(async (response)=>{
@@ -278,6 +302,7 @@ module.exports = {
             res.status(404).json(response)
         }
     },
+    // GET User Page
     userData:(req,res)=>{
         userName = req.session.user.fName;
         cartCount = req.session.user.cart.length
@@ -286,6 +311,7 @@ module.exports = {
             res.render('user/account',{title:'BigShopper',userLog,userName,cartCount,wallet})
         })
     },
+    // GET Order history Page
     orderHistory:(req,res)=>{
         userName = req.session.user.fName;
         cartCount = req.session.user.cart.length
@@ -293,6 +319,7 @@ module.exports = {
             res.render('user/order-history',{title:'BigShopper',userLog,userName,orders,cartCount})
         })
     },
+    // GET Order details page
     orderDetails:(req,res)=>{
         userName = req.session.user.fName;
         cartCount = req.session.user.cart.length
@@ -300,11 +327,13 @@ module.exports = {
             res.render('user/view-order',{title:'BigShopper',userLog,userName,order,cartCount})
         })
     },
+    // Cancel the Order
     cancelOrder:(req,res)=>{
         userHelpers.changeOrderStatus(req.query.id,req.body).then(()=>{
             res.json({status:true})
         })
     },
+    // GET My Address page
     getAddresses:(req,res)=>{
         userName = req.session.user.fName;
         cartCount = req.session.user.cart.length
@@ -312,6 +341,7 @@ module.exports = {
             res.render('user/myAddresses',{title: 'BigShopper',userLog,userName,addresses,cartCount})
         })
     },
+    // GET Add new Address page
     addNewAddress:(req,res)=>{
         userName = req.session.user.fName;
         cartCount = req.session.user.cart.length
@@ -322,6 +352,7 @@ module.exports = {
         }
         res.render('user/addAccountAddress',{title: 'BigShopper',userLog,userName,cartCount,orderPageStatus})
     },
+    // POST Add new Address
     addNewAccountAddress:(req,res)=>{
         req.body.id = new ObjectId();
         userHelpers.addAddress(req.session.user._id,req.body).then(()=>{
@@ -332,6 +363,7 @@ module.exports = {
             }
         })
     },
+    // GET Edit Address page
     editAddress:(req,res)=>{
         userName = req.session.user.fName;
         cartCount = req.session.user.cart.length
@@ -345,6 +377,7 @@ module.exports = {
             res.render('user/editAccountAddress',{title:'BigShopper',userLog,userName,response,cartCount,orderPageStatus})
         })
     },
+    // POST Edit Address page
     editAddressPosting:(req,res)=>{
         userHelpers.updateAccountAddress(req.session.user._id,req.query.id,req.body).then(()=>{
             
@@ -356,11 +389,13 @@ module.exports = {
             orderPageStatus = null;
         })
     },
+    // Delete one Address
     deleteAnAddress:(req,res)=>{
         userHelpers.deleteAccountAddress(req.session.user._id,req.query.id).then(()=>{
             res.json({status:true})
         })
     },
+    // Coupon Validation in order confirm page
     couponValidation:async(req,res)=>{
         req.query.subTotal = Number(req.query.subTotal)
         let couponCount = await userHelpers.checkCouponExistance(req.session.user._id,req.query.couponCode)
