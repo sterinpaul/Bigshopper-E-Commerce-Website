@@ -13,10 +13,10 @@ module.exports = {
 
                 if(skipNo == '0'){
 
-                    let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({listed:true}).limit(8).toArray()
+                    let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({listed:true}).limit(8).sort({_id:-1}).toArray()
                     resolve([products,proQty])
                 }else{
-                    let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({listed:true}).limit(8).skip(skipNo*8).toArray()
+                    let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({listed:true}).limit(8).skip(skipNo*8).sort({_id:-1}).toArray()
                     resolve([products,proQty])
                 }
 
@@ -29,10 +29,10 @@ module.exports = {
 
                 if(skipNo == '0'){
 
-                    let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({category:category,listed:true}).limit(8).toArray()
+                    let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({category:category,listed:true}).limit(8).sort({_id:-1}).toArray()
                     resolve([products,proQty])
                 }else{
-                    let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({category:category,listed:true}).limit(8).skip(skipNo*8).toArray()
+                    let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({category:category,listed:true}).limit(8).skip(skipNo*8).sort({_id:-1}).toArray()
                     resolve([products])
                 }
                 

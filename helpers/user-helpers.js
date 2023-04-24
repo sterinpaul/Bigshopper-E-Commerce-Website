@@ -217,7 +217,6 @@ module.exports = {
         })
     },
     getRazorpay: (response) => {
-        console.log('getRazorpay with response',response)
         try {
           return new Promise((resolve) => {
             const razorpay = new Razorpay({
@@ -250,7 +249,6 @@ module.exports = {
         }
     },
     verifyPayment:(user,paymentInfo) => {
-        console.log('verify payment with user,payment info',user,paymentInfo)
         try {
           return new Promise((resolve, reject) => {
             let hmac = crypto.createHmac("sha256", "6PZjf8ZGzaZLWf0rDR3i2rOF")
