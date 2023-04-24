@@ -200,12 +200,10 @@ module.exports = {
             req.body.listed = true
             productHelpers.addSubCategory(req.body).then(()=>{
                 // res.redirect('/admin/category-management')
-                subCategoryExists = false
-                res.json(subCategoryExists)
+                res.json({subCategory : false})
             })
         }else{
-            subCategoryExists = true
-            res.json(subCategoryExists)
+            res.json({subCategory : true})
         }
     },
     getEditCategory:async(req,res)=>{

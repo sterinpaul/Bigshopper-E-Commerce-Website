@@ -232,12 +232,12 @@ function addSubCategory(){
         subCategory:subCategory
       },
       success:function(response){
-        if(response){
+        if(response.subCategory){
           document.getElementById('sub-category-alert').style.display = 'block'
           document.getElementById('sub-category-success').style.display = 'none'
         }else{
             $(document).ready(function(){
-              $('#productsTable').load(window.location.href + ' #productsTable' );
+              $('#category-table').load(window.location.href + ' #category-table' );
             })
 
           document.getElementById('sub-category-success').style.display = 'block'
