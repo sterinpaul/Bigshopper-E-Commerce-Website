@@ -291,7 +291,10 @@ module.exports = {
                     let orderData = {
                         orderId:ObjectId(req.body["payment[receipt]"]),
                         total:parseInt(req.body["payment[amount]"])/100,
-                        addressId:req.body["payment[address]"],
+                        subTotal: parseInt(req.body["payment[subTotal]"]),
+                        couponCode: req.body["payment[couponCode]"],
+                        discount: parseInt(req.body["payment[discount]"]),
+                        addressId: req.body["payment[address]"],
                         paymentOption:'RazorPay'
                     }
                     await userHelpers.orderCreation(req.session.user._id,orderData)

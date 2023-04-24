@@ -205,9 +205,9 @@ module.exports = {
                 }
 
                 // Updating product sale count & Quantity
-                let items = cart.map(product=>{return {_id:product._id , quantity:product.quantity}})
-                for(let i=0;i<items.length;i++){
-                    await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:(items[i]._id)},{$inc:{quantity:-(items[i].quantity),count:(items[i].quantity)}})
+                // let items = cart.map(product=>{return {_id:product._id , quantity:product.quantity}})
+                for(let i=0;i<cart.length;i++){
+                    await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:(cart[i]._id)},{$inc:{quantity:-(cart[i].quantity),count:(cart[i].quantity)}})
                 }
 
                 // Emptying cart
@@ -217,6 +217,7 @@ module.exports = {
         })
     },
     getRazorpay: (response) => {
+        console.log('getRazorpay with response',response)
         try {
           return new Promise((resolve) => {
             const razorpay = new Razorpay({
@@ -236,6 +237,9 @@ module.exports = {
                 console.log(err)
               } else {
                 order.address = response.addressId
+                order.subTotal = response.subTotal
+                order.discount = response.discount
+                order.couponCode = response.couponCode
                 resolve(order)
               }
             })
@@ -246,6 +250,7 @@ module.exports = {
         }
     },
     verifyPayment:(user,paymentInfo) => {
+        console.log('verify payment with user,payment info',user,paymentInfo)
         try {
           return new Promise((resolve, reject) => {
             let hmac = crypto.createHmac("sha256", "6PZjf8ZGzaZLWf0rDR3i2rOF")
