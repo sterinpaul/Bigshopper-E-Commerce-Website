@@ -107,7 +107,6 @@ module.exports = {
                     }
                 })
             }
-            console.log('checkedArray',checkedArray);
 
             resolve(checkedArray)
         })
