@@ -278,6 +278,7 @@ function placeOrder(event){
 }
 
 const getRazorpay = (order) => {
+    console.log('inside getRazorpay-order',order)
         var options = {
             "key": 'rzp_test_4VsIGWWmuTgkQq', // Enter the Key ID generated from the Dashboard
             "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -315,6 +316,7 @@ const getRazorpay = (order) => {
 
 
     const verifyPayment = (payment, order) => {
+        console.log('verify payment with payment, order',payment, order)
         $.ajax({
             type: "post",
             url: '/verify-payment',
@@ -323,6 +325,7 @@ const getRazorpay = (order) => {
                 order
             },
             success: (response) => {
+                console.log('success after- verify payment',response)
                 if(response.status) {
                     swal({
                         title: "Order placed Successful",
