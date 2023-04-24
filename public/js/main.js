@@ -49,7 +49,7 @@ function validatePassword(){
         document.getElementById('errorPassword').innerText="";
         
     }else{
-        document.getElementById('errorPassword').innerText = "* Invalid Password"
+        document.getElementById('errorPassword').innerText = "* Password should contain atleast 1 Upper case 1 Special character and 1 number"
     }
 }
 

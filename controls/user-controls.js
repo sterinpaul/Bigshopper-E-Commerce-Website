@@ -235,7 +235,7 @@ module.exports = {
             for(let i=0;i<noStock.length;i++){
                 message += noStock[i].name +' : Available qty. '+ noStock[i].qty+' , '
             }
-            res.json({status:message})
+            res.json({message:message})
         }else{
             req.body.orderId = ObjectId()
             req.body.subTotal = parseInt(req.body.subTotal)

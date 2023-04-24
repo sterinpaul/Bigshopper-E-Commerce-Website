@@ -248,11 +248,12 @@ function placeOrder(event){
         type:'POST',
         data:$('#formOrder').serialize()+'&subTotal='+subTotal+'&couponCode='+coupon+'&discount='+discount+'&total='+cartTotal,
         success:(response)=>{
-            if(response.status){
+            console.log('resp after place',response)
+            if(response.message){
                 swal({
                     title: `Out of stock`,
                     text: `These Products are Out of stock
-                            ${response.status}`
+                        ${response.message}`
                 })
             }else{
                 if(response.COD_status){
