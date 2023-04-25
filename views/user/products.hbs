@@ -243,73 +243,108 @@
 			success:(response)=>{
 				let reloadingHtml = ''
                 for(let i=0;i<(response[0].length);i++){
-					if(response[0][i].noCart){
-						reloadingHtml += `
-						<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
-							<div class="block2">
-								<div class="block2-pic hov-img0">
-									<img src="/img/products/${response[0][i].images[0]}" alt="IMG-PRODUCT">
+					if(response[2]){
+						if(response[0][i].noCart){
+							reloadingHtml += `
+							<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+								<div class="block2">
+									<div class="block2-pic hov-img0">
+										<img src="/img/products/${response[0][i].images[0]}" alt="IMG-PRODUCT">
 
-									<a href="/quick_view-product?id=${response[0][i]._id}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-										Quick View
-									</a>
-								</div>
-
-								<div class="block2-txt flex-w flex-t p-t-14">
-									<div class="block2-txt-child1 flex-col-l ">
-										<a href="/product-detail" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-											${response[0][i].brand} ${response[0][i].name}
-										</a>
-
-										<span class="stext-105 cl3">
-											₹ ${response[0][i].price}
-										</span>
-									</div>
-
-									<div id="add-${response[0][i]._id}">
-										<a href="/cart" class="btn-addwish-b2 pos-relative">
-											<img class="icon-heart1 trans-04" style="width:1.7rem;" src="images/cart.png" alt="ICON">
-											<img class="icon-heart2 ab-t-l" style="width:1.7rem;" src="images/cart.png" alt="ICON">
+										<a href="/quick_view-product?id=${response[0][i]._id}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+											Quick View
 										</a>
 									</div>
 
-								</div>
-							</div>
-						</div>`
+									<div class="block2-txt flex-w flex-t p-t-14">
+										<div class="block2-txt-child1 flex-col-l ">
+											<a href="/product-detail" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+												${response[0][i].brand} ${response[0][i].name}
+											</a>
 
+											<span class="stext-105 cl3">
+												₹ ${response[0][i].price}
+											</span>
+										</div>
+
+										<div id="add-${response[0][i]._id}">
+											<a href="/cart" class="btn-addwish-b2 pos-relative">
+												<img class="icon-heart1 trans-04" style="width:1.7rem;" src="images/cart.png" alt="ICON">
+												<img class="icon-heart2 ab-t-l" style="width:1.7rem;" src="images/cart.png" alt="ICON">
+											</a>
+										</div>
+
+									</div>
+								</div>
+							</div>`
+
+						}else{
+							reloadingHtml += `
+							<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+								<div class="block2">
+									<div class="block2-pic hov-img0">
+										<img src="/img/products/${response[0][i].images[0]}" alt="IMG-PRODUCT">
+
+										<a href="/quick_view-product?id=${response[0][i]._id}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+											Quick View
+										</a>
+									</div>
+
+									<div class="block2-txt flex-w flex-t p-t-14">
+										<div class="block2-txt-child1 flex-col-l ">
+											<a href="/product-detail" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+												${response[0][i].brand} ${response[0][i].name}
+											</a>
+
+											<span class="stext-105 cl3">
+												₹ ${response[0][i].price}
+											</span>
+										</div>
+
+										<div id="add-${response[0][i]._id}">
+											<button onclick="addToCartFromHome('${response[0][i]._id}')" class="btn-addwish-b2 dis-block pos-relative">
+												<img class="icon-heart1 dis-block trans-04" style="width:30px;height:30px;" src="images/icons/addtocart.png" alt="ICON">
+												<img class="icon-heart2 ab-t-l" style="width:30px;height:30px;" src="images/icons/addtocart.png" alt="ICON">
+											</button>
+										</div>
+
+									</div>
+								</div>
+							</div>`
+						}
 					}else{
 						reloadingHtml += `
-						<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
-							<div class="block2">
-								<div class="block2-pic hov-img0">
-									<img src="/img/products/${response[0][i].images[0]}" alt="IMG-PRODUCT">
-		
-									<a href="/quick_view-product?id=${response[0][i]._id}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-										Quick View
-									</a>
-								</div>
-		
-								<div class="block2-txt flex-w flex-t p-t-14">
-									<div class="block2-txt-child1 flex-col-l ">
-										<a href="/product-detail" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-											${response[0][i].brand} ${response[0][i].name}
+							<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+								<div class="block2">
+									<div class="block2-pic hov-img0">
+										<img src="/img/products/${response[0][i].images[0]}" alt="IMG-PRODUCT">
+
+										<a href="/quick_view-product?id=${response[0][i]._id}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+											Quick View
 										</a>
-		
-										<span class="stext-105 cl3">
-											₹ ${response[0][i].price}
-										</span>
 									</div>
-		
-									<div id="add-${response[0][i]._id}">
-										<button onclick="addToCartFromHome('${response[0][i]._id}')" class="btn-addwish-b2 dis-block pos-relative">
-											<img class="icon-heart1 dis-block trans-04" style="width:30px;height:30px;" src="images/icons/addtocart.png" alt="ICON">
-											<img class="icon-heart2 ab-t-l" style="width:30px;height:30px;" src="images/icons/addtocart.png" alt="ICON">
-										</button>
+
+									<div class="block2-txt flex-w flex-t p-t-14">
+										<div class="block2-txt-child1 flex-col-l ">
+											<a href="/product-detail" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+												${response[0][i].brand} ${response[0][i].name}
+											</a>
+
+											<span class="stext-105 cl3">
+												₹ ${response[0][i].price}
+											</span>
+										</div>
+
+										<div id="add-${response[0][i]._id}">
+											<a href="/signin" class="btn-addwish-b2 pos-relative">
+												<img class="icon-heart1 trans-04" style="width:1.7rem;" src="images/icons/addtocart.png" alt="ICON">
+												<img class="icon-heart2 ab-t-l" style="width:1.7rem;" src="images/icons/addtocart.png" alt="ICON">
+											</a>
+										</div>
+
 									</div>
-	
 								</div>
-							</div>
-						</div>`
+							</div>`
 					}
 					
                 }

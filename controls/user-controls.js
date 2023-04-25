@@ -116,21 +116,17 @@ module.exports = {
                     userName = req.session.user.fName;
                     cartCount = req.session.user.cart.length
                     await userHelpers.checkCartProducts(products,req.session.user._id).then((products)=>{
-                        console.log('User',products);
                         res.render('user/products',{title: 'BigShopper',userLog,userName,products,itemAddedToCart:req.session.itemAdded,categoryData,cartCount,qty,proPage:true})
                     })
                 }else{
-                    console.log('No User',products);
                     res.render('user/products',{title: 'BigShopper',userLog,products,categoryData,qty,proPage:true})
                 }
             }else{
                 if(req.session.user){
                     await userHelpers.checkCartProducts(products,req.session.user._id).then((products)=>{
-                        console.log('ajax-user',products);
-                        res.json([products,qty])
+                        res.json([products,qty,(req.session.user.fName)])
                     })
                 }else{
-                    console.log('ajax-No User',products);
                     res.json([products,qty])
                 }
             }
