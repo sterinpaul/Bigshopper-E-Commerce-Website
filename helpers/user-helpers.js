@@ -160,6 +160,20 @@ module.exports = {
             })   
         })
     },
+    checkCartProducts:(productData,userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let cart  = await db.get().collection(collection.USER_COLLECTION).findOne({_id:objectId(userId)})
+            cart = cart.cart
+            for(let i=0;i<productData.length;i++){
+                for(let j=0;j<cart.length;j++){
+                    if(String(productData[i]._id) == String(cart[j]._id)){
+                        productData[i].noCart = true
+                    }
+                }
+            }
+            resolve(productData)
+        })
+    },
     getCartTotal:(userId)=>{
         return new Promise(async(resolve,reject)=>{
             let sum = await db.get().collection(collection.USER_COLLECTION).aggregate([
