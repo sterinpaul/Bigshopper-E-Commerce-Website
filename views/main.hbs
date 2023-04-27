@@ -197,7 +197,7 @@
         firebase.initializeApp(firebaseConfig);
         render();
 
-        function render(){
+        {{!-- function render(){
             window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container',{
                 'size':'invisible',
                 'callback':(response)=>{
@@ -205,14 +205,14 @@
                 }
             })
             recaptchaVerifier.render();
-        }
+        } --}}
 		
-		/*
+		
    		function render(){
             window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container')
             recaptchaVerifier.render();
         }
-		*/
+		
         
         function phoneAuth(){
             var number = "+91"+document.getElementById('mobile').value;
