@@ -1,0 +1,123 @@
+<section>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="md-6 mt-2 add-product-container">
+                <h2 class="text-center mb-2">Add Product</h2>
+                <form action="/admin/add-product" method="POST" enctype="multipart/form-data">
+                    <table>
+                        
+                        <tr>
+                            <td><label for="category">Category </label></td>
+                            <td class="pl-2">
+                                <select name="category" class="form-control" id="category" onchange="selectCategoryAddProduct()">
+                                    <option>Please Select</option>
+                                    {{#each response.category}}
+                                        <option>{{this.category}}</option>
+                                    {{/each}}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="subCategory">Sub-Category</label></td>
+                            <td class="pl-2">
+                                <select name="subCategory" class="form-control" id="subCategory">
+                                    <option></option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><label for="brandInput">Brand</label></td>
+                            <td class="pl-2"><input id="brandInput" type="text" class="form-control" name="brand" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="nameInput">Name</label></td>
+                            <td class="pl-2"><input id="nameInput" type="text" class="form-control" name="name" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="specInput">Specification</label></td>
+                            <td class="pl-2"><textarea id="specInput" type="text" class="form-control" name="specification" required></textarea></td>
+                        </tr>
+                        <tr>
+                            <td><label for="imageInput">Images</label></td>
+                            <td class="pl-2 pt-2 pb-2">
+                                <div style="display:flex;align-items:center">
+                                    <div class="addProductImgInputContainer">
+                                        <img src="/images/Add Image.jpg" class="addProductImage" id="imageInput1" alt="1">
+                                        <input type="file" accept=".jpg,.jpeg,.png" class="form-control" name="images" onchange="viewImage1(event)">
+                                    </div>
+                                        
+                                    <div class="addProductImgInputContainer">
+                                        <img src="/images/Add Image.jpg" class="addProductImage" id="imageInput2" alt="2">
+                                        <input type="file" accept=".jpg,.jpeg,.png" class="form-control" name="images" onchange="viewImage2(event)">
+                                    </div>
+
+                                    <div class="addProductImgInputContainer">
+                                        <img src="/images/Add Image.jpg" class="addProductImage" id="imageInput3" alt="3">
+                                        <input type="file" accept=".jpg,.jpeg,.png" class="form-control" name="images" onchange="viewImage3(event)">
+                                    </div>
+                                </div>
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="quantity">Quantity</label></td>
+                            <td class="pl-2"><input id="quantity" type="number" class="form-control" maxlength="4" name="quantity" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="priceInput">Price in ₹</label></td>
+                            <td class="pl-2"><input id="priceInput" type="number" class="form-control" maxlength="8" name="price" required></td>
+                        </tr> 
+
+                    </table>
+                    <div class="mt-3 text-center">
+                      	<button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+    function selectCategoryAddProduct(){
+        {{!-- let categoryName = document.getElementById('category').options[document.getElementById('category').selectedIndex].text --}}
+        let categoryName = document.getElementById('category').value
+        
+        if(categoryName != 'Please Select'){
+            $.ajax({
+                url:'/admin/selectCategory-addProduct',
+                type:'GET',
+                data:{
+                    id:categoryName
+                },
+                success:function(subCategory){
+                    let selectHtml = ''
+                    for(let i=0;i<subCategory.length;i++){
+                        selectHtml += ("<option>" + subCategory[i] + "</option>")
+                    }
+                    document.getElementById("subCategory").innerHTML = selectHtml
+                    document.getElementById("subCategory").removeAttribute('disabled')
+                }
+            })
+        }else{
+            document.getElementById("subCategory").innerHTML = "";
+            document.getElementById("subCategory").setAttribute('disabled','')
+        }
+    }
+
+
+
+
+
+    function viewImage1(event){
+        document.getElementById('imageInput1').src = URL.createObjectURL(event.target.files[0])
+    }
+    function viewImage2(event){
+        document.getElementById('imageInput2').src = URL.createObjectURL(event.target.files[0])
+    }
+    function viewImage3(event){
+        document.getElementById('imageInput3').src = URL.createObjectURL(event.target.files[0])
+    }
+</script>

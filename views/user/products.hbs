@@ -1,0 +1,402 @@
+
+	<!-- Product -->
+	<div class="bg0">
+		<div class="container">
+			<div class="flex-w flex-sb-m">
+				<div class="flex-w flex-l-m filter-tope-group m-tb-10">
+					<select class="form-control" style="margin-left:.5rem" id="shopCategorySelect" onchange="shopCategorySelect('0')">
+						<option value="All Products" checked>All Products</option>
+						
+						{{#each categoryData}}
+						<option value="{{this.category}}">{{this.category}}</option>
+						{{/each}}
+
+						<option value="Top Selling">Top Selling</option>
+					</select>
+				</div>
+
+				<div class="flex-w flex-c-m m-tb-10">
+					<div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
+						<i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
+						<i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
+						Search
+					</div>
+				</div>
+				
+				<!-- Search product -->
+				<div class="dis-none panel-search w-full p-t-10 p-b-15">
+					<div>
+						<div class="bor8 dis-flex p-l-15">
+							<button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+								<i class="zmdi zmdi-search"></i>
+							</button>
+	
+							<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search" onkeyup="searchByInput()" id="searchByInput">
+						</div>
+						<span id="searchResultContainer">
+						</span>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="row grid" id="shopProductContainer">
+				{{#if userName}}
+					{{#each products}}
+					<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+						<!-- Block2 -->
+						<div class="block2">
+							<div class="block2-pic hov-img0">
+								<img src="/img/products/{{this.images.[0]}}" alt="IMG-PRODUCT" class="imgContainer">
+								<a href="/quick_view-product?id={{this._id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+									Quick View
+								</a>
+							</div>
+							<div class="block2-txt flex-w flex-t p-t-14">
+								<div class="block2-txt-child1 flex-col-l ">
+									<a href="/quick_view-product?id={{this._id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+										{{this.brand}} {{this.name}}
+									</a>
+									<span class="stext-105 cl3">
+										₹ {{this.price}}
+									</span>
+								</div>
+								<div id="add-{{this._id}}">
+									{{#if this.noCart}}
+									<a href="/cart" class="btn-addwish-b2 pos-relative">
+										<img class="icon-heart1 trans-04" style="width:1.7rem;" src="images/cart.png" alt="ICON">
+										<img class="icon-heart2 ab-t-l" style="width:1.7rem;" src="images/cart.png" alt="ICON">
+									</a>
+									{{else}}
+									<button onclick="addToCartFromHome('{{this._id}}')" class="btn-addwish-b2 pos-relative">
+										<img class="icon-heart1 trans-04" style="width:30px;height:30px;" src="images/icons/addtocart.png" alt="ICON">
+										<img class="icon-heart2 ab-t-l" style="width:30px;height:30px;" src="images/icons/addtocart.png" alt="ICON">
+									</button>
+									{{/if}}
+									{{!-- <a href="" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2 m-t-6 m-l-10">
+										<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
+										<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
+									</a> --}}
+								</div>
+							</div>
+						</div>
+					</div>
+					{{/each}}
+
+				{{else}}
+
+					{{#each products}}
+					<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+						<!-- Block2 -->
+						<div class="block2">
+							<div class="block2-pic hov-img0">
+								<img src="/img/products/{{this.images.[0]}}" alt="IMG-PRODUCT" class="imgContainer">
+
+								<a href="/quick_view-product?id={{this._id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+									Quick View
+								</a>
+							</div>
+
+							<div class="block2-txt flex-w flex-t p-t-14">
+								<div class="block2-txt-child1 flex-col-l ">
+									<a href="/quick_view-product?id={{this._id}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+										{{this.brand}} {{this.name}}
+									</a>
+
+									<span class="stext-105 cl3">
+										₹ {{this.price}}
+									</span>
+								</div>
+
+								<a href="/signin" class="btn-addwish-b2 pos-relative">
+									<img class="icon-heart1 dis-block trans-04" style="width:30px;height:30px;" src="images/icons/addtocart.png" alt="ICON">
+									<img class="icon-heart2 ab-t-l" style="width:30px;height:30px;" src="images/icons/addtocart.png" alt="ICON">
+								</a>
+
+								{{!-- <a href="" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2 m-t-6 m-l-10">
+									<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
+									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
+								</a> --}}
+
+							</div>
+						</div>
+					</div>
+					{{/each}}
+				{{/if}}
+			</div>
+
+			<!-- Load more -->
+			{{!-- <div class="flex-c-m flex-w w-full p-t-45">
+				<a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
+					Load More
+				</a>
+			</div> --}}
+
+			<div class="p-2">
+				<nav aria-label="Page navigation example">
+				  <ul class="pagination d-flex justify-content-center" id="paginationContainer">
+				    {{!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li> --}}
+					{{!-- <li onclick="shopCategorySelect('0')" class="page-item page-link">1</li> --}}
+					{{!-- {{#each products}} --}}
+				    {{!-- <li onclick="shopCategorySelect('{{inc @index}}')" class="page-item page-link">{{inc @index}}</li> --}}
+					{{!-- {{/each}} --}}
+				    {{!-- <li class="page-item"><a class="page-link" href="#">Next</a></li> --}}
+				  </ul>
+				</nav>
+			</div>
+			
+		</div>
+
+	</div>
+	
+
+	
+
+
+
+
+
+<script>
+
+	document.getElementById('searchByInput').value = '';
+	
+	let paginationContainer = `<li class="page-item"><a class="page-link" href="#">Previous</a></li>`
+	
+	for(let i=0;i<({{qty}}/8);i++){
+		paginationContainer += `<li onclick="shopCategorySelect(${i})" id="${i+1}" class="page-link">${i+1}</li>`
+	}
+	paginationContainer += `<li class="page-item"><a class="page-link" href="#">Next</a></li>`
+
+	document.getElementById('paginationContainer').innerHTML = paginationContainer;
+	
+
+
+	{{!-- function addToCartFromHome(id){
+
+		$.ajax({
+			url:'/addToCart?id='+id,
+			type:'POST',
+			data:{
+				qty:1
+			},
+			success:(response)=>{
+				if(response.noLogin){
+					swal( "Please Login !!", "warning");
+				}else{
+					if(response.status){
+						swal("","Product added to cart!", "success");
+						$(document).ready(function(){
+                			$('#cartChange').load(window.location.href + ' #cartChange' );
+							$('#cartChangeM').load(window.location.href + ' #cartChangeM' );
+              			})
+					}else{
+						swal("Sorry !", "Product is out of stock", "warning");
+					}
+				}
+			}
+		})
+	} --}}
+
+	function addToCartFromHome(id){
+
+		$.ajax({
+			url:'/addToCart?id='+id,
+			type:'POST',
+			data:{
+				qty:1
+			},
+			success:(response)=>{
+				if(response.noLogin){
+					swal( "Please Login !!", "warning");
+					
+				}else{
+					if(response.status){
+						swal("","Product added to cart!", "success");
+						document.getElementById('add-'+id).innerHTML = `
+								<a href="/cart" class="btn-addwish-b2 pos-relative">
+									<img class="icon-heart1 trans-04" style="width:1.7rem;" src="images/cart.png" alt="ICON">
+									<img class="icon-heart2 ab-t-l" style="width:1.7rem;" src="images/cart.png" alt="ICON">
+								</a>`
+						$(document).ready(function(){
+                			$('#cartChange').load(window.location.href + ' #cartChange' );
+							$('#cartChangeM').load(window.location.href + ' #cartChangeM' );
+              			})
+					}else{
+						swal("Sorry !", "Product is out of stock", "warning");
+					}
+				}
+			}
+		})
+	}
+
+	function shopCategorySelect(skipNo=0){
+		let choosedCategory = document.getElementById('shopCategorySelect').value
+		
+		$.ajax({
+			url:'/products',
+			type:'GET',
+			data:{
+				category:choosedCategory,
+				skip:skipNo
+			},
+			success:(response)=>{
+				let reloadingHtml = ''
+                for(let i=0;i<(response[0].length);i++){
+					if(response[2]){
+						if(response[0][i].noCart){
+							reloadingHtml += `
+							<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+								<div class="block2">
+									<div class="block2-pic hov-img0">
+										<img src="/img/products/${response[0][i].images[0]}" alt="IMG-PRODUCT" class="imgContainer">
+
+										<a href="/quick_view-product?id=${response[0][i]._id}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+											Quick View
+										</a>
+									</div>
+
+									<div class="block2-txt flex-w flex-t p-t-14">
+										<div class="block2-txt-child1 flex-col-l ">
+											<a href="/product-detail" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+												${response[0][i].brand} ${response[0][i].name}
+											</a>
+
+											<span class="stext-105 cl3">
+												₹ ${response[0][i].price}
+											</span>
+										</div>
+
+										<div id="add-${response[0][i]._id}">
+											<a href="/cart" class="btn-addwish-b2 pos-relative">
+												<img class="icon-heart1 trans-04" style="width:1.7rem;" src="images/cart.png" alt="ICON">
+												<img class="icon-heart2 ab-t-l" style="width:1.7rem;" src="images/cart.png" alt="ICON">
+											</a>
+										</div>
+
+									</div>
+								</div>
+							</div>`
+
+						}else{
+							reloadingHtml += `
+								<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+									<div class="block2">
+										<div class="block2-pic hov-img0">
+											<img src="/img/products/${response[0][i].images[0]}" alt="IMG-PRODUCT" class="imgContainer">
+	
+												<a href="/quick_view-product?id=${response[0][i]._id}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+													Quick View
+												</a>
+											</div>
+	
+											<div class="block2-txt flex-w flex-t p-t-14">
+												<div class="block2-txt-child1 flex-col-l ">
+													<a href="/product-detail" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+														${response[0][i].brand} ${response[0][i].name}
+													</a>
+	
+													<span class="stext-105 cl3">
+														₹ ${response[0][i].price}
+													</span>
+												</div>
+	
+												<div id="add-${response[0][i]._id}">
+													<button onclick="addToCartFromHome('${response[0][i]._id}')" class="btn-addwish-b2 dis-block pos-relative">
+														<img class="icon-heart1 dis-block trans-04" style="width:30px;height:30px;" src="images/icons/addtocart.png" alt="ICON">
+														<img class="icon-heart2 ab-t-l" style="width:30px;height:30px;" src="images/icons/addtocart.png" alt="ICON">
+													</button>
+												</div>
+	
+											</div>
+									</div>
+								</div>
+							`
+						}
+					}else{
+						reloadingHtml += `
+							<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+								<div class="block2">
+									<div class="block2-pic hov-img0">
+										<img src="/img/products/${response[0][i].images[0]}" alt="IMG-PRODUCT" class="imgContainer">
+
+										<a href="/quick_view-product?id=${response[0][i]._id}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+											Quick View
+										</a>
+									</div>
+
+									<div class="block2-txt flex-w flex-t p-t-14">
+										<div class="block2-txt-child1 flex-col-l ">
+											<a href="/product-detail" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+												${response[0][i].brand} ${response[0][i].name}
+											</a>
+
+											<span class="stext-105 cl3">
+												₹ ${response[0][i].price}
+											</span>
+										</div>
+
+										<div id="add-${response[0][i]._id}">
+											<a href="/signin" class="btn-addwish-b2 pos-relative">
+												<img class="icon-heart1 trans-04" style="width:1.7rem;" src="images/icons/addtocart.png" alt="ICON">
+												<img class="icon-heart2 ab-t-l" style="width:1.7rem;" src="images/icons/addtocart.png" alt="ICON">
+											</a>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						`
+					}
+					
+                }
+				document.getElementById('shopProductContainer').innerHTML = reloadingHtml
+
+				
+					let paginationContainer = `<li class="page-item"><a class="page-link" href="">Previous</a></li>`
+					
+					for(let i=0;i<(response[1]/8);i++){
+						paginationContainer += `<li onclick="shopCategorySelect(${i})" id="${i}" class="page-item page-link">${i+1}</li>`
+					}
+					paginationContainer += `<li class="page-item"><a class="page-link" href="">Next</a></li>`
+
+					document.getElementById('paginationContainer').innerHTML = paginationContainer;
+					document.getElementById('searchByInput').value = ''
+					document.getElementById('searchResultContainer').innerHTML = '';
+			}
+		})
+		
+	}
+
+
+	function searchByInput(){
+		let category = document.getElementById('shopCategorySelect').value
+		let keyWord = document.getElementById('searchByInput').value
+		
+		if(keyWord != ' ' && keyWord != ''){
+			$.ajax({
+				url:'/searchByName',
+				type:'GET',
+				data:{
+					category:category,
+					keyWord:keyWord
+				},
+				success:(response)=>{
+					let searchResultContainer =''
+					for(let i=0;i<response.length;i++){
+						searchResultContainer += `
+						<a href="/quick_view-product?id=${response[i]._id}" class="text-dark" style="padding: 0.5rem 0.75rem;">${response[i].brand} ${response[i].name}</a>
+						`
+					}
+					document.getElementById('searchResultContainer').style.border = '1px solid #e6e6e6';
+					document.getElementById('searchResultContainer').innerHTML = searchResultContainer;
+				}
+			})
+
+		}else{
+			document.getElementById('searchResultContainer').innerHTML = '';
+			document.getElementById('searchResultContainer').style.border = 'none';
+		}
+	}
+	
+
+</script>

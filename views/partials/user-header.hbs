@@ -1,0 +1,279 @@
+
+	<!-- Header -->
+	<header class="header-v2">
+		<!-- Header desktop -->
+		<div class="container-menu-desktop trans-03">
+			<div class="wrap-menu-desktop">
+				<nav class="limiter-menu-desktop p-l-45">
+					
+					<!-- Logo desktop -->		
+					<a href='/' class="logo">BigShopper</a>
+
+					<!-- Menu desktop -->
+					<div class="menu-desktop">
+						<ul class="main-menu">
+							<li>
+								<a href='/' class="{{#if hPage}}active{{/if}}">Home</a>
+							</li>
+
+							<li>
+								<a href="/products" class="{{#if proPage}}active{{/if}}">Shop</a>
+							</li>
+
+							{{#if userName}}
+							<li>
+								<a href="/cart" class="{{#if cartPage}}active{{/if}}">Cart</a>
+							</li>
+							{{/if}}
+							{{!-- <li>
+								<a href="/about">About</a>
+							</li>
+
+							<li>
+								<a href="/contact">Contact</a>
+							</li> --}}
+						</ul>
+					</div>	
+
+					<!-- Icon header -->
+					{{!-- <div class="wrap-icon-header flex-w flex-r-m h-full"> --}}
+					<div class="wrap-icon-header flex-w flex-r-m h-full">
+
+						{{#if userName}}
+
+						<div class="sign-in-up mr-2 d-flex">
+							<div class="dropdown">
+							  <a href="#" class="dropdown-toggle">{{userName}}</a>
+							  <div class="dropdown-content">
+							    <a href="/account">Dashboard</a>
+							    <a href="/orders">Orders</a>
+							    <a href="/addresses">My Address</a>
+							    {{!-- <a href="/profile">My Account</a> --}}
+							  </div>
+							</div>
+							<a href="/signout">Sign Out</a>
+						</div>
+
+						<div class="flex-c-m h-full p-l-18 p-r-25 bor5">
+							<div class="icon-header-item cl2 hov-cl1 trans-04 p-lr-11 js-show-cart">
+								{{!-- <i class="zmdi zmdi-shopping-cart"></i> --}}
+								<a href="/cart" id="cartChange">
+									<img style="width:1.7rem;" src="images/cart.png" alt="cart"/>
+									{{#if cartCount}}
+										<span id="cartIcon">{{cartCount}}</span>
+									{{/if}}
+								</a>
+							</div>
+						</div>
+
+						{{else}}
+
+						<!-- Sign in and Sign up -->
+						<div class="sign-in-up mr-2">
+							<a href="/signin">Sign In</a>
+							<a href="/signup">Sign Up</a>
+						</div>
+
+						{{!-- {{/if}}
+
+						<div class="flex-c-m h-full p-r-24">
+							<div class="icon-header-item cl2 hov-cl1 trans-04 p-lr-11 js-show-modal-search">
+								<i class="zmdi zmdi-search"></i>
+							</div>
+						</div>
+							{{#if userName}} --}}
+
+						{{!-- <div class="flex-c-m h-full p-l-18 p-r-25 bor5">
+							<div class="icon-header-item cl2 hov-cl1 trans-04 p-lr-11 icon-header-noti js-show-cart" data-notify="2">
+								<i class="zmdi zmdi-shopping-cart"></i>
+							</div>
+						</div> --}}
+							{{/if}}
+						<div class="flex-c-m h-full p-lr-19">
+							<div class="icon-header-item cl2 hov-cl1 trans-04 p-lr-11 js-show-sidebar">
+								<i class="zmdi zmdi-menu"></i>
+							</div>
+						</div>
+					</div>
+				</nav>
+			</div>	
+		</div>
+
+		<!-- Header Mobile -->
+		<div class="wrap-header-mobile">
+			<!-- Logo moblie -->		
+			<div class="logo-mobile">
+				<a href='/' class="logo">BigShopper</a>
+			</div>
+
+			<!-- Icon header -->
+			<div class="wrap-icon-header flex-w flex-r-m h-full m-r-15">
+
+				{{#if userName}}
+
+						<div class="sign-in-up mr-2 d-flex">
+							<div class="dropdown">
+							  <a href="#" class="dropdown-toggle">{{userName}}</a>
+							  <div class="dropdown-content">
+							    <a href="/account">Dashboard</a>
+							    <a href="/orders">Orders</a>
+							    <a href="/addresses">My Address</a>
+							    {{!-- <a href="/profile">My Account</a> --}}
+							  </div>
+							</div>
+							<a href="/signout">Sign Out</a>
+						</div>
+
+					<div class="flex-c-m h-full p-lr-10 bor5">
+						<div class="icon-header-item cl2 hov-cl1 trans-04 p-lr-11 js-show-cart">
+							<a href="/cart" id="cartChangeM">
+								<img style="width:1.7rem;" src="images/cart.png" alt="cart"/>
+								{{#if cartCount}}
+									<span id="cartIconM">{{cartCount}}</span>
+								{{/if}}
+							</a>
+						</div>
+					</div>
+
+
+				{{else}}
+
+				<!-- Sign in and Sign up -->
+				<div class="sign-in-up mr-2">
+					<a href="/signin">Sign In</a>
+					<a href="/signup">Sign Up</a>
+				</div>
+
+				{{/if}}
+
+				{{!-- <div class="flex-c-m h-full p-r-10">
+					<div class="icon-header-item cl2 hov-cl1 trans-04 p-lr-11 js-show-modal-search">
+						<i class="zmdi zmdi-search"></i>
+					</div>
+				</div> --}}
+
+				{{!-- {{#if userName}} --}}
+				
+				{{!-- <div class="flex-c-m h-full p-lr-10 bor5">
+					<div class="icon-header-item cl2 hov-cl1 trans-04 p-lr-11 icon-header-noti js-show-cart" data-notify="2">
+						<i class="zmdi zmdi-shopping-cart"></i>
+					</div>
+				</div> --}}
+
+				{{!-- {{/if}} --}}
+
+			</div>
+
+			<!-- Button show menu -->
+			<div class="btn-show-menu-mobile hamburger hamburger--squeeze">
+				<span class="hamburger-box">
+					<span class="hamburger-inner"></span>
+				</span>
+			</div>
+		</div>
+
+
+		<!-- Menu Mobile -->
+		<div class="menu-mobile">
+			<ul class="main-menu-m">
+				<li>
+					<a href='/'>Home</a>
+				</li>
+
+				<li>
+					<a href="/products">Shop</a>
+				</li>
+
+				{{#if userName}}
+				<li>
+					<a href="/cart">Cart</a>
+				</li>
+				{{/if}}
+
+				{{!-- <li>
+					<a href="about.html">About</a>
+				</li>
+
+				<li>
+					<a href="contact.html">Contact</a>
+				</li> --}}
+			</ul>
+		</div>
+
+
+		<!-- Modal Search -->
+		{{!-- <div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
+			<div class="container-search-header">
+				<button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
+					<img src="/images/icons/icon-close2.png" alt="CLOSE">
+				</button>
+
+				<form class="wrap-search-header flex-w p-l-15">
+					<button class="flex-c-m trans-04">
+						<i class="zmdi zmdi-search"></i>
+					</button>
+					<input class="plh3" type="text" name="search" placeholder="Search...">
+				</form>
+			</div>
+		</div> --}}
+
+	</header>
+
+	{{#if userName}}
+
+	<!-- Sidebar -->
+	<aside class="wrap-sidebar js-sidebar">
+		<div class="s-full js-hide-sidebar"></div>
+
+		<div class="sidebar flex-col-l p-t-22 p-b-25">
+			<div class="flex-r w-full p-b-30 p-r-27">
+				<div class="fs-35 lh-10 cl2 p-lr-5 pointer hov-cl1 trans-04 js-hide-sidebar">
+					<i class="zmdi zmdi-close"></i>
+				</div>
+			</div>
+
+			<div class="sidebar-content flex-w w-full p-lr-65 js-pscroll">
+
+				<ul class="sidebar-link w-full">
+					<li class="p-b-13">
+						<a href='/' class="stext-102 cl2 hov-cl1 trans-04">
+							Home
+						</a>
+					</li>
+
+					<li class="p-b-13">
+						<a href="#" class="stext-102 cl2 hov-cl1 trans-04">
+							My Wishlist
+						</a>
+					</li>
+
+					<li class="p-b-13">
+						<a href="/account" class="stext-102 cl2 hov-cl1 trans-04">
+							My Account
+						</a>
+					</li>
+
+					{{!-- <li class="p-b-13">
+						<a href="#" class="stext-102 cl2 hov-cl1 trans-04">
+							Track Oder
+						</a>
+					</li>
+
+					<li class="p-b-13">
+						<a href="#" class="stext-102 cl2 hov-cl1 trans-04">
+							Refunds
+						</a>
+					</li>
+
+					<li class="p-b-13">
+						<a href="#" class="stext-102 cl2 hov-cl1 trans-04">
+							Help & FAQs
+						</a>
+					</li> --}}
+				</ul>
+			</div>
+		</div>
+	</aside>
+
+	{{/if}}
+

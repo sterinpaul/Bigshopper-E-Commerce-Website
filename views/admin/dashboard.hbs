@@ -1,0 +1,268 @@
+
+<section class="content-main d-flex flex-column" style="margin:0 auto">
+    <div class="content-header d-flex justify-content-between align-items-center m-3">
+        <div class="m-2">
+            <h2>Dashboard</h2>
+            <p>Whole data about your business here</p>
+        </div>
+        <div>
+            <a href="/admin/sales-report" class="btn btn-primary m-2">Create report</a>
+        </div>
+    </div>
+    <div class="d-flex flex-wrap m-2">
+        <div class="col-md-3">
+            <div class="card card-body mb-4 dashBoardCard">
+                <article class="icontext" style="min-height:6.5rem;">
+                    <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
+                    <div class="text">
+                        <h5 class="mb-1 card-title">Revenue</h5>
+                        <h3>₹ {{totalSales.total}}</h3>
+                        <span class="text-sm">
+                            Shipping fees are not included
+                        </span>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-body mb-4 dashBoardCard">
+                <article class="icontext" style="min-height:6.5rem;">
+                    <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
+                    <div class="text">
+                        <h5 class="mb-1 card-title">Orders</h5>
+                        <h3>{{totalSales.count}}</h3>
+                        <span class="text-sm">
+                            Excluding orders in transit
+                        </span>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-body mb-4 dashBoardCard">
+                <article class="icontext" style="min-height:6.5rem;">
+                    <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-qr_code"></i></span>
+                    <div class="text">
+                        <h5 class="mb-1 card-title">Products</h5>
+                        <h3>{{productsCount}}</h3>
+                        <span class="text-sm">
+                            In {{categoryData.length}} Categories
+                        </span>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-body mb-4 dashBoardCard">
+                <article class="icontext" style="min-height:6.5rem;">
+                    <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                    <div class="text">
+                        <h5 class="mb-1 card-title">Monthly Earning</h5>
+                        <h3>₹ {{avgMonthSale}}</h3>
+                        <span class="text-sm">
+                            Based on orders.
+                        </span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-wrap justify-content-between flex-column gap-2 w-100 p-2">
+       {{!-- <div class="m-auto pt-3">
+            <article class="card card-body text-center">
+                <h5>Last year Sale</h5>
+                <canvas id="myChartMonthly" style="max-width:415px;"></canvas>
+            </article>
+        </div> --}}
+        <div>
+            <h5>Last year Sale</h5>
+            <div id="chartdiv" style="width:80%;height:500px;overflow:hidden"></div>
+        </div>
+        <div class="m-auto pt-3">
+            <article class="card card-body m-auto text-center">
+                <h5>Sales by category</h5>
+                <canvas id="myChart" style="max-width:415px;"></canvas>
+            </article>
+        </div>
+    </div>
+</section>
+        
+
+
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+        
+<script>
+
+
+    let xValues =[]
+    let yValues =[]
+
+    {{#each categoryData}}
+        xValues.push('{{this.category}}')
+        yValues.push({{this.count}})
+    {{/each}}
+  
+    var barColors = [
+      "#b91d47",
+      "#00aba9",
+      "#2b5797",
+      "#e8c3b9",
+      "#1e7145"
+    ];
+
+    new Chart("myChart", {
+      type: "doughnut",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: barColors,
+          data: yValues
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: ""
+        }
+      }
+    });
+
+    
+    let xaValues = []
+    let yaValues = []
+
+    {{#each monthlySales}}
+        xaValues.push('{{this.month}}')
+        yaValues.push({{this.totalSales}})
+    {{/each}}
+
+
+
+var baraColors = ["orange","brown","orange","brown","orange","brown","orange","brown","orange","brown","orange","brown"];
+
+new Chart("myChartMonthly", {
+  type: "bar",
+  data: {
+    labels: xaValues,
+    datasets: [{
+      backgroundColor: baraColors,
+      data: yaValues
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: ""
+    }
+  }
+});
+
+am5.ready(function() {
+
+// Create root element
+// https://www.amcharts.com/docs/v5/getting-started/#Root_element
+var root = am5.Root.new("chartdiv");
+
+// Set themes
+// https://www.amcharts.com/docs/v5/concepts/themes/
+root.setThemes([
+  am5themes_Animated.new(root)
+]);
+
+// Create chart
+// https://www.amcharts.com/docs/v5/charts/xy-chart/
+var chart = root.container.children.push(
+  am5xy.XYChart.new(root, {
+    panX: true,
+    panY: true,
+    wheelX: "panX",
+    wheelY: "zoomX"
+  })
+);
+
+// Add cursor
+// https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
+cursor.lineY.set("visible", false);
+
+// Create axes
+// https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+var xRenderer = am5xy.AxisRendererX.new(root, { minGridDistance: 30 });
+
+var xAxis = chart.xAxes.push(
+  am5xy.CategoryAxis.new(root, {
+    maxDeviation: 0.3,
+    categoryField: "country",
+    renderer: xRenderer,
+    tooltip: am5.Tooltip.new(root, {})
+  })
+);
+
+xRenderer.grid.template.setAll({
+  location: 1
+})
+
+var yAxis = chart.yAxes.push(
+  am5xy.ValueAxis.new(root, {
+    maxDeviation: 0.3,
+    renderer: am5xy.AxisRendererY.new(root, {
+      strokeOpacity: 0.1
+    })
+  })
+);
+
+// Create series
+// https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+var series = chart.series.push(
+  am5xy.ColumnSeries.new(root, {
+    name: "Series 1",
+    xAxis: xAxis,
+    yAxis: yAxis,
+    valueYField: "value",
+    sequencedInterpolation: true,
+    categoryXField: "country"
+  })
+);
+
+series.columns.template.setAll({
+  width: am5.percent(120),
+  fillOpacity: 0.9,
+  strokeOpacity: 0
+});
+series.columns.template.adapters.add("fill", (fill, target) => {
+  return chart.get("colors").getIndex(series.columns.indexOf(target));
+});
+
+series.columns.template.adapters.add("stroke", (stroke, target) => {
+  return chart.get("colors").getIndex(series.columns.indexOf(target));
+});
+
+series.columns.template.set("draw", function(display, target) {
+  var w = target.getPrivate("width", 0);
+  var h = target.getPrivate("height", 0);
+  display.moveTo(0, h);
+  display.bezierCurveTo(w / 4, h, w / 4, 0, w / 2, 0);
+  display.bezierCurveTo(w - w / 4, 0, w - w / 4, h, w, h);
+});
+
+var d = '{{monthlySales}}'
+
+var data = JSON.stringify(d)
+console.log(d,data)
+
+xAxis.data.setAll(data);
+series.data.setAll(data);
+
+// Make stuff animate on load
+// https://www.amcharts.com/docs/v5/concepts/animations/
+series.appear(1000);
+chart.appear(1000, 100);
+
+}); // end am5.ready()
+
+</script>

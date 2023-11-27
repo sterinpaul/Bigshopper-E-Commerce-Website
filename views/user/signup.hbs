@@ -1,0 +1,130 @@
+<!-- Section: Design Block -->
+<section class="background-radial-gradient overflow-hidden">
+  <style>
+    .background-radial-gradient {
+      background-color: hsl(218, 41%, 15%);
+      background-image: radial-gradient(650px circle at 0% 0%,
+          hsl(218, 41%, 35%) 15%,
+          hsl(218, 41%, 30%) 35%,
+          hsl(218, 41%, 20%) 75%,
+          hsl(218, 41%, 19%) 80%,
+          transparent 100%),
+        radial-gradient(1250px circle at 100% 100%,
+          hsl(218, 41%, 45%) 15%,
+          hsl(218, 41%, 30%) 35%,
+          hsl(218, 41%, 20%) 75%,
+          hsl(218, 41%, 19%) 80%,
+          transparent 100%);
+    }
+
+    .bg-glass {
+      background-color: hsla(0, 0%, 100%, 0.9) !important;
+      backdrop-filter: saturate(200%) blur(25px);
+    }
+  </style>
+
+  <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-2">
+    <div class="row gx-lg-5 align-items-center mb-5">
+      <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+        <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
+          The best offer <br />
+          <span style="color: hsl(218, 81%, 75%)">for you</span>
+        </h1>
+      </div>
+
+      <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+        {{!-- <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+        <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div> --}}
+
+        <div class="card bg-glass">
+          <div class="card-body px-4 py-5 px-md-5">
+            <form action="/signup" method="POST" onsubmit="return signUpValidation()" role="form" enctype="application/x-www-form-urlencoded">
+              <!-- 2 column grid layout with text inputs for the first and last names -->
+              <div class="row">
+                <div class="col-md-6 mb-2">
+                  <div class="form-outline">
+                    <input type="text" id="form3Example1" name="fName" class="form-control" onblur="validateFirstName()" required/>
+                    <label class="form-label" for="form3Example1">First name</label>
+                    <label class="form-label" id="errorFName"></label>
+                  </div>
+                </div>
+                
+                <div class="col-md-6 mb-2">
+                  <div class="form-outline">
+                    <input type="text" id="form3Example2" name="lName" class="form-control" onblur="validateLastName()" required/>
+                    <label class="form-label" for="form3Example2">Last name</label>
+                    <label class="form-label" id="errorLName"></label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Gender Select -->
+              <div style="display:inline-block">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="gender" value="Male" id="flexRadioDefault1" checked>
+                  <label class="form-check-label" for="flexRadioDefault1">
+                    Male
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="gender" value="Female" id="flexRadioDefault2">
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    Female
+                  </label>
+                </div>
+              </div>
+
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <input type="email" id="form3Example3" onblur="validateEmail()" name="email" class="form-control" required/>
+                <label class="form-label" for="form3Example3">Email address</label>
+                <label class="form-label" id="errorMail"></label>
+              </div>
+
+              <!-- Password input -->
+              <div class="form-outline mb-4">
+                <input type="password" id="form3Example4" onblur="validatePassword()" name="password" class="form-control" required/>
+                <label class="form-label" for="form3Example4">Password</label>
+                <label class="form-label" id="errorPassword"></label>
+              </div>
+
+                <!-- Confirm Password input -->
+              <div class="form-outline mb-4">
+                <input type="password" id="form3Example5" onblur="validateRetypePassword()" class="form-control" required/>
+                <label class="form-label" for="form3Example5">Confirm Password</label>
+                <label class="form-label" id="errorConfirmPassword"></label>
+              </div>
+
+                <!-- Mobile input -->
+              <div class="form-outline mb-2">
+                <input type="text" onblur="validateMobile()" minlength="10" maxlength="10" id="mobile" name="mobile" class="form-control" required/>
+                <label class="form-label" for="mobile">Mobile Number</label>
+
+                <label class="form-label" id="errorMobile"></label>
+
+                <p id="signupSendOtp" onclick="phoneAuth()">Send OTP</p>
+              </div>
+
+              <div id="verifierUp" style="display:flex;justify-content:center;display:none">
+                <input class="form-control mb-3" id="OtpField" style="width:8rem;" placeholder="Enter otp">
+                <p class="otpVerify" onclick="codeverify()">Verify</p>
+              </div>
+
+              <!-- Submit button -->
+              <button type="submit" class="btn btn-primary btn-block" id="signInBtn">
+                Sign up
+              </button>
+              <label class="form-label" id="signUpValidation"></label>
+
+              {{#if userExist}}
+                <label class="form-label" style="color:red" id="userExistError">User already exists</label>
+              {{/if}}
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

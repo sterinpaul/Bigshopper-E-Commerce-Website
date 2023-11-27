@@ -1,0 +1,85 @@
+
+	<!-- Cart -->
+	
+		<div class="text-center" style="min-height:40vh;">
+			<div class="p-t-15">
+				<div class="mtext-103">
+					
+					{{#if user.cart.[0]._id}}
+					
+					<span id="cartHeading" >Your Cart</span>
+					{{else}}
+					<div style="margin:10px 10vw;text-align:center;">Your Cart is Empty</div>
+					{{/if}}
+				</div>
+			</div>
+			
+			<div class="header-cart-content flex-w js-pscroll m-t-10">
+
+				{{#each user.cart}}
+				
+					<ul class="header-cart-wrapitem w-full" id='prod-{{this._id}}'>
+
+						<li class="header-cart-item flex-w flex-t m-b-12 d-flex align-items-center justify-content-center">
+							<div class="header-cart-item-img">
+								<img src="/img/products/{{this.images.[0]}}" alt="IMG">
+							</div>
+
+							<div class="m-2 w-25">
+								<a href="/quick_view-product?id={{this._id}}" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+									{{this.name}}
+								</a>
+
+								<div>
+									<span id="qty-{{this._id}}">{{this.quantity}} x </span>
+									<span id="price-{{this._id}}">{{this.price}} </span>
+									<span> = ₹ </span>
+									<span id="total-{{this._id}}">{{multiply this.quantity this.price}}</span>
+								</div>
+
+							</div>
+
+							<div>
+								<div class="d-flex align-items-center">
+									<div class="wrap-num-product flex-w">
+										<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m" onclick="decreaseCount('{{this._id}}')">
+											<i class="fs-16 zmdi zmdi-minus"></i>
+										</div>
+										<input class="mtext-104 cl3 txt-center num-product" id="quantity-{{this._id}}" type="text" value="{{this.quantity}}" disabled>
+										<div class="btn-num-product-up hov-btn3 flex-c-m" onclick="increaseCount('{{this._id}}')" id="plus-{{this._id}}">
+											<i class="fs-16 zmdi zmdi-plus" id="plusBtn-{{this._id}}"></i>
+										</div>
+									</div>
+
+									<div>
+										<button class="btn btn-primary ml-1" onclick="removeProduct('{{this._id}}')">Remove</button>
+									</div>
+								</div>
+								<p id="warn-{{this._id}}" style="height:1rem;" class="text-danger"></p>
+							</div>
+
+							
+						</li>
+					</ul>
+				
+
+				{{/each}}
+
+				{{#if user.cart}}
+				<div class="w-full" id="totalContainer">
+					<div class="header-cart-total w-full p-tb-40">
+						<span>Total - ₹ </span>
+						<span id="cartTotal">{{user.sum}}</span>
+					</div>
+
+					
+					<div class="d-flex justify-content-center">
+						<a href="/order-confirm?id={{user._id}}" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">
+							Check Out
+						</a>
+					</div>
+				</div>
+				{{/if}}
+
+			</div>
+		</div>

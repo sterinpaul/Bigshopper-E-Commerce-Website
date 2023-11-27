@@ -1,0 +1,59 @@
+
+<!-- Cart Check-out-->
+	
+<div class="d-flex flex-column justify-content-center align-items-center">
+
+    <div class="m-4">
+        <h3>Add Address</h3>
+    </div>
+
+    <form action="/add-address" method="POST">
+        <div>
+            <table>
+                <tr>
+                    <td><label for="houseName">Flat/House Name</label></td>
+                    <td class="pl-2"><input id="houseName" type="text" class="form-control" name="houseName" required></td>
+                </tr>
+
+                <tr>
+                    <td><label for="street"></label>Street</td>
+                    <td class="pl-2"><input id="street" type="text" class="form-control" name="street" required></td>
+                </tr>
+
+                <tr>
+                    <td><label for="town"></label>Town</td>
+                    <td class="pl-2"><input id="town" type="text" class="form-control" name="town" required></td>
+                </tr>
+
+                <tr>
+                    <td><label for="district"></label>District</td>
+                    <td class="pl-2"><input id="district" type="text" class="form-control" name="district" required></td>
+                </tr>
+
+                <tr>
+                    <td><label for="state"></label>State</td>
+                    <td class="pl-2"><input id="state" type="text" class="form-control" name="state" required></td>
+                </tr>
+
+
+                <tr>
+                    <td><label for="pinCode"></label>PIN</td>
+                    <td class="pl-2"><input id="pinCode" type="number" class="form-control" name="pinCode" required></td>
+                </tr>
+                
+                <tr>
+                    <td><label for="mobileNo"></label>Mobile No.</td>
+                    <td class="pl-2"><input id="mobileNo" type="number" class="form-control" name="mobileNo" required></td>
+                </tr>
+
+            </table>
+        </div>
+        <div class="m-3 text-center">
+          	<button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+
+
+</div>
+
+

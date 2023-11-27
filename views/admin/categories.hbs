@@ -1,0 +1,204 @@
+<section>
+  <div style="display:flex;justify-content:center;margin:auto;flex-wrap:wrap;max-width:90vw">
+      <div class="md-6 mt-2 p-3 add-category-container">
+        <h3 class="text-center mb-4">Add Category</h3>
+        <table>
+          <tr>
+            <td><label for="category">Category</label></td>
+            <td class="pl-2"><input id="category" type="text" class="form-control"></td>
+          </tr>
+        </table>
+        <p id="category-alert" style="color:red;text-align:center;display:none">Category already exists !!</p>
+        <p id="category-success" style="color:rgb(0, 13, 255);text-align:center;display:none">Category added</p>
+        <div class="mt-3 mb-3 text-center">
+          <button class="btn btn-primary" onclick="categoryValidation('category')? addCategory():'';">Add</button>
+        </div>
+      </div>
+    
+
+      <div class="md-6 mt-2 p-3 add-category-container">
+        <h3 class="text-center mb-4">Add Sub-Category</h3>
+        <table id="categoryFieldChange">
+          <tr>
+            <td><label for="category">Category</label></td>
+            <td class="pl-2">
+              <select id="categoryForSub" type="text" class="form-control">
+                {{#each response.category}}
+                <option value="{{this._id}}">{{this.category}}</option>
+                {{/each}}
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td><label for="subCategory">Sub Category</label></td>
+            <td class="pl-2"><input id="subCategory" type="text" class="form-control" name="subCategory"></td>
+          </tr>
+        </table>
+        <p id="sub-category-alert" style="color:red;text-align:center;display:none">Sub category already exists !!</p>
+        <p id="sub-category-success" style="color:rgb(0, 13, 255);text-align:center;display:none">Sub-category added</p>
+        <div class="mt-3 mb-3 text-center">
+          	<button class="btn btn-primary" onclick="categoryValidation('subCategory')? addSubCategory():'';">Add</button>
+        </div>
+      </div>
+    
+
+      <table class="table table-striped mt-2" id="category-table">
+        <thead>
+          <tr>
+            <th scope="col" style="text-align:center;">No.</th>
+            <th scope="col" style="text-align:center;">Category</th>
+            <th scope="col" style="text-align:center;">Sub-Category</th>
+            <th scope="col" style="text-align:center;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each response.subCategory}}
+          <tr>
+            <td style="text-align:center;">{{inc @index}}</td>
+            <td style="text-align:center;">{{this.category}}</td>
+            <td style="text-align:center;">{{this.subCategory}}</td>
+
+            <td class="col-1">
+              {{!-- <a href="/admin/edit-category?id={{this._id}}" class="btn btn-primary" style="margin-left:auto;margin-right:auto;">Edit</a> --}}
+
+              <button type="button" style="width:4rem" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="onclickEditCategory('{{this._id}}')" data-dismiss="modal">
+                Edit
+              </button>
+
+              {{#if this.listed}}
+              <button onclick="categoryListUnlist('false','{{this._id}}')" class="btn btn-danger mt-1" style="width:4rem">Unlist</button>
+                {{else}}
+              <button onclick="categoryListUnlist('true','{{this._id}}')" class="btn btn-info mt-1" style="width:4rem">List</button>
+              {{/if}}
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+  </div>
+</section>
+
+
+
+<!-- Button trigger modal -->
+{{!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button> --}}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-body">
+
+        <h3 class="text-center mb-4 mt-4">Edit Sub-category</h3>
+        <table style="margin:auto">
+          <tr>
+              <input id="hiddenCategoryId" hidden>
+              <td><label for="categoryName">Category</label></td>
+              <td class="pl-2">
+                  <input class="form-control" id="categoryName" disabled>
+              </td>
+          </tr>
+          <tr>
+              <td><label for="subCategoryName">Sub Category</label></td>
+              <td class="pl-2"><input id="subCategoryName" type="text" class="form-control" name="subCategory" required></td>
+          </tr>
+        </table>
+        <p class="text-center text-danger" style="display:none" id="errorMessage">Sub-category already exists !!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="updateBtn" data-bs-dismiss="modal" onclick="categoryValidation('subCategoryName')? updateSubcategory():'';">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function onclickEditCategory(id){
+    $.ajax({
+      url:'/admin/edit-category',
+      type:'GET',
+      data:{id:id},
+      success:(subCategory)=>{
+        
+        document.getElementById('categoryName').value = subCategory.category
+        document.getElementById('subCategoryName').value = subCategory.subCategory
+        document.getElementById('updateBtn').value = subCategory._id
+        document.getElementById('hiddenCategoryId').value = subCategory.categoryId
+      }
+    })
+  }
+
+  function updateSubcategory(){
+    let categoryId = document.getElementById('hiddenCategoryId').value
+    let subCategoryId = document.getElementById('updateBtn').value
+    let subCategoryName = document.getElementById('subCategoryName').value
+  
+    $.ajax({
+      url:'/admin/edit-category?id='+subCategoryId,
+      type:'POST',
+      data:{
+        categoryId:categoryId,
+        subCategory:subCategoryName
+      },
+      success:(response)=>{
+        
+        if(response){
+          document.getElementById('errorMessage').style.display = 'none'
+          
+          $(document).ready(function(){
+            $('#category-table').load(window.location.href + ' #category-table' );
+          })
+
+        }else{
+          document.getElementById('errorMessage').style.display = 'block'
+          setTimeout(()=>{
+            document.getElementById('errorMessage').style.display = 'none'
+            document.getElementById('subCategoryName').value = ''
+          },2000)
+        }
+      }
+    })
+  }
+
+  
+  function categoryListUnlist(status,categoryId){
+    let list;
+    if(status == 'true'){
+      list = 'list'
+    }else{
+      list = 'unlist'
+    }
+    swal({
+    title: "Are you sure ?",
+    text: `Do you want to ${list} this category ?`,
+    {{!-- icon: "warning", --}}
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((willDelete) => {
+    if (willDelete) {
+        $.ajax({
+            url:'/admin/listUnlist-category',
+            type:'GET',
+            data:{
+                id:categoryId,
+                listed:status
+            },
+            success:(response)=>{
+                if(response.status){
+                    $(document).ready(function(){
+                        $('#category-table').load(window.location.href + ' #category-table' );
+                    })
+                }
+            }
+        })
+    }
+  })
+}
+
+</script>

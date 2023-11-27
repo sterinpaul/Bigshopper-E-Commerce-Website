@@ -1,0 +1,234 @@
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title text-center pt-3">Sales report </h2>
+            <div class="text-right mr-4">
+                <span>Download report as:</span>
+                <button class="btn btn-primary ml-2" id="pdf">PDF</button>
+                <button class="btn btn-primary" id="xlsheet">Excel</button>
+            </div>
+        </div>
+    </div>
+    <div class="card m-3">
+
+        <header class="card-header">
+
+            <div class="d-flex align-items-center justify-content-between flex-wrap">
+                <div class="d-flex justify-content-evenly">
+                    <div class="d-flex align-items-center ml-2">
+                        <label for="fromDate">From</label>
+                        <input id="fromDate" name="fromDate" type="date" class="form-control ml-2">
+                    </div>
+                    <div class="d-flex align-items-center ml-2">
+                        <label for="toDate">To</label>
+                        <input id="toDate" name="toDate" type="date" class="form-control ml-2">
+                    </div>
+                </div>
+                <div class="d-flex align-items-center ml-2">
+
+                    <select class="form-control" id="paymentType">
+                        <option>Show all</option>
+                        <option>RazorPay</option>
+                        <option>COD</option>
+                    </select>
+
+                </div>
+                <button class="btn btn-primary m-1" onclick="searchByCriteria()">
+                    Search
+                </button>
+            </div>
+            <p class="text-danger" style="display:none" id="invalidDateAlert">* Invalid date</p>
+
+        </header>
+
+        <div class="card-body" id="sales-report">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sl.No.</th>
+                            <th>#ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Mobile</th>
+                            <th scope="col">Payment mode</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sales-table">
+                        {{#each orders}}
+                        <tr>
+                            <td>{{inc @index}}</td>
+                            <td>{{this._id}}</td>
+                            <td><b>{{this.userName}}</b></td>
+                            <td>{{this.address.mobileNo}}</td>
+                            <td>{{this.modeOfPayment}}</td>
+                            <td>{{this.dated}}</td>
+                            <td><b>₹{{this.total}}</b></td>
+                        </tr>
+                        {{/each}}
+                        <tr>
+                            <td colspan="6" class="text-center"><b>Grand Total</b></td>
+                            <td><b id="salesGrandTotal"></b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> <!-- table-responsive //end -->
+        </div> <!-- card-body end// -->
+    </div> <!-- card end// -->
+    {{!-- <div class="pagination-area mt-15 mb-50">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                <li class="page-item"><a class="page-link" href="#">02</a></li>
+                <li class="page-item"><a class="page-link" href="#">03</a></li>
+                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                <li class="page-item"><a class="page-link" href="#">16</a></li>
+                <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div> --}}
+</section>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.6/xlsx.full.min.js"></script>
+
+<script>
+
+
+{{!-- Sales Grand Total --}}
+
+let salesGrandTotal = 0;
+{{#each orders}}
+    salesGrandTotal += {{this.total}}
+{{/each}}
+document.getElementById('salesGrandTotal').innerText = "₹"+salesGrandTotal;
+
+
+
+    function searchByCriteria() {
+        let fromDate = document.getElementById('fromDate').value
+        let toDate = document.getElementById('toDate').value
+        let paymentType = document.getElementById('paymentType').value
+        console.log(toDate)
+        const today = moment().format('YYYY-MM-DD')
+        if (fromDate == '') {
+            fromDate = '2000-01-01'
+        }
+        if (toDate == '') {
+            toDate = today
+        }
+
+        if (fromDate > today || toDate > today || fromDate > toDate) {
+            document.getElementById('invalidDateAlert').style.display = 'block'
+            setTimeout(() => document.getElementById('invalidDateAlert').style.display = 'none', 2000)
+        } else {
+            document.getElementById('invalidDateAlert').style.display = 'none'
+            $.ajax({
+                url: '/admin/sales-report',
+                type: 'GET',
+                data: {
+                    fromDate: fromDate,
+                    toDate: toDate,
+                    modeOfPayment: paymentType
+                },
+                success: (response) => {
+                    if(response){
+                        let filteredData = '';
+                        let grandTotal = 0;
+                        
+                        for (let i = 0; i < response.length; i++) {
+                            filteredData += `<tr>
+                                <td>${i+1}</td>
+                                <td>${response[i]._id}</td>
+                                <td><b>${response[i].userName}</b></td>
+                                <td>${response[i].address.mobileNo}</td>
+                                <td>${response[i].modeOfPayment}</td>
+                                <td>${response[i].dated}</td>
+                                <td><b>₹${response[i].total}</b></td>
+                            </tr>`
+                            grandTotal += response[i].total
+                        }
+                        filteredData += 
+                        `<tr>
+                            <td colspan="6" class="text-center"><b>Grand Total</b></td>
+                            <td><b id="salesGrandTotal">₹${grandTotal}</b></td>
+                        </tr>`
+
+                        document.getElementById('sales-table').innerHTML = filteredData
+                    }
+                }
+            })
+        }
+    }
+
+
+
+
+{{!-- PDF & Excel Sales Report download --}}
+
+    $(document).ready(function(){
+
+        $('#pdf').click(function (e) {
+
+            swal("Are you sure want to download this ?", {
+                buttons: ["No", "Yes"],
+            }).then((res) => {
+                if (res) {
+                    event.preventDefault();
+                    var element = document.getElementById('sales-report');
+                    let randomNumber = Math.floor(Math.random() * (10000000000 - 1)) + 1;
+                    var opt = {
+                        margin: 0,
+                        filename: 'SalesReport' + randomNumber + '.pdf',
+                        html2canvas: { scale: 10 },
+                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    };
+
+                    html2pdf().set(opt).from(element).save();
+                }
+            })
+
+        })
+
+
+    })
+
+
+
+
+    $(document).ready(function(){
+        $('#xlsheet').on('click', function () {
+            swal("Are you sure want to download this ?", {
+                buttons: ["No", "Yes"],
+            }).then((res) => {
+                if (res) {
+                    const rows = $('#sales-table tr');
+                    const data = [];
+
+
+                    // Loop through rows and cells to build the data array
+                    rows.each(function (index, row) {
+                        const rowData = [];
+                        $(row).find('th, td').each(function (index, cell) {
+                            rowData.push($(cell).text());
+                        });
+                        data.push(rowData);
+                    });
+
+                    // Convert the data array to a SheetJS workbook and sheet
+                    const ws = XLSX.utils.aoa_to_sheet(data);
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+                    // Save the workbook as an Excel file
+                    XLSX.writeFile(wb, 'sales-table.xlsx');
+                }
+            })
+
+        });
+    });
+
+</script>

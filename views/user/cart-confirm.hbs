@@ -1,0 +1,390 @@
+﻿
+<main class="main p-3">
+    <section class="mt-50 mb-50">
+        <div class="container">
+            <form id="formOrder">
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="m-3">
+                            <h4>Choose your Address</h4>
+                        </div>
+
+                        <div style="border:1px solid rgb(232, 231, 231);border-radius:.5rem;padding:1rem;">
+
+                            {{#if response.address}}
+
+                            <table class="table">
+                                {{#each response.address}}
+                                <tr>
+                                    <td>
+                                        <input class="form-check-input ml-1" type="radio" name="addressId" value="{{this.id}}" id="{{this.id}}" checked="">
+                                    </td>
+
+                                    <td>
+                                        <label for="{{this.id}}" style="cursor:pointer;">
+                                        {{this.name}}<br>
+                                        {{this.houseName}},
+                                        {{this.street}}<br>
+                                        {{this.town}},
+                                        {{this.district}}<br>
+                                        {{this.state}} -
+                                        {{this.pinCode}}<br>
+                                        {{this.mobileNo}}
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <a href="/editAddress?id={{this.id}}&order=cart" class="btn btn-primary">Edit</a>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </table>
+                            {{else}}
+                            <h4 id="addressCheck" value="false">Please add an address to deliver the products...</h4>
+                            {{/if}}
+                            <div class="p-3">
+                                <a href="/addNewAddress?order=cart" class="btn btn-primary">Add Address</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    
+                    <div class="col-md-6">
+                        <div class="order_review">
+                            <div class="m-3">
+                                <h4>Your Orders</h4>
+                            </div>
+                            <div class="table-responsive order_table text-center" style="border:1px solid rgb(227, 224, 224);border-radius:.5rem;">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" colspan="2">Product</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each response.cart}}
+                                        <tr>
+                                            <td class="image product-thumbnail"><img  src="/img/products/{{this.images.[0]}}" style="width:4rem;" alt="Product Image"></td>
+                                            <td>
+                                                <h5><a href="/quick_view-product?id={{this._id}}">{{this.brand}} {{this.name}}</a></h5> 
+                                                <span class="product-qty" id="qty">{{this.quantity}}</span>
+                                                <span>x</span>
+                                                <span class="product-qty" id="price">{{this.price}}</span>
+                                            </td>
+                                            <td>₹ {{multiply this.quantity this.price}}</td>
+                                        </tr>
+                                        {{/each}}
+                                        <tr>
+                                            <th>SubTotal</th>
+                                            <td class="product-subtotal" colspan="2">₹ 
+                                                <span id="subTotalAmount"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Shipping</th>
+                                            <td colspan="2"><em>Free Shipping</em></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Coupon Discount</th>
+                                            <td colspan="2" id="couponDiscount">0</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total</th>
+                                            <td colspan="2" class="product-subtotal">₹ 
+                                                <span class="font-xl text-brand fw-900" id="totalCartAmount"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="row p-2 m-3" style="border:1px solid rgb(227, 224, 224);border-radius:.5rem;background-color:rgb(246, 246, 246);">
+                                <div class="col-lg-6">
+                                    <div class="toggle_info">
+                                        <span><i class="fi-rs-label mr-10"></i><span class="text-muted">Have a coupon?</span> <a href="#coupon" data-bs-toggle="collapse" class="collapsed" aria-expanded="false">Click here</a></span>
+                                    </div>
+                                    <div class="panel-collapse collapse coupon_form " id="coupon">
+                                        <div class="panel-body">
+                                            <p class="mb-30 font-sm">If you have a coupon code, please apply it below.</p>
+                                            
+                                                <div class="d-flex">
+                                                    <input class="form-control" id="couponCode" type="text" oninput="this.value = this.value.toUpperCase()" style="text-transform:uppercase;width:fit-content;" maxlength="15">
+                                                    <div class="btn btn-secondary" onclick="removeCoupon()" style="margin-left:.3rem;border-radius:50%;cursor:pointer;">X</div>
+                                                </div>
+                                                <p class="text-success m-1" id="validCoupon"></p>
+                                                <p class="text-danger m-1"  id="invalidCoupon"></p>
+                                                <div>
+                                                    <div class="btn btn-primary mt-2" style="cursor:pointer" onclick="addCoupon()">Apply Coupon</div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{#if walletAmount}}
+                            <div class="d-flex align-items-center m-2">
+                                <div class="m-2">
+                                    <input type="checkbox" id="wallet" onclick="useWallet({{walletAmount}})">
+                                </div>
+                                <div class="m-2 pt-2">
+                                    <label for="wallet">Use wallet</label>
+                                </div>
+                                <div class="m-2 text-primary">
+                                    ₹ 
+                                    <span id="walletAmount">{{walletAmount}}</span>
+                                </div>
+                            </div>
+                            <div id="payableAlert" style="display:none">
+                                <div class="d-flex align-items-center justify-content-start ml-4">
+                                    <h4 class="text-primary text-center pb-2">Payable Amount  ₹ </h4><input class="text-primary ml-2 mb-2" style="font-size:x-large;width:30%" name="payableAmount" id="payableAmount" tabindex="-1" readonly>
+                                </div>
+                            </div>
+                            {{/if}}
+
+                            <div class="payment_method ml-3" id="paymentSelectContainer">
+                                <div class="m-2">
+                                    <h5>Payment</h5>
+                                </div>
+                                <div class="payment_option ml-3 p-2">
+                                    <div class="custome-radio">
+                                        <input class="form-check-input" type="radio" name="paymentOption" value="COD" id="exampleRadios3" checked="">
+                                        <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse" data-target="#cashOnDelivery" aria-controls="cashOnDelivery" style="cursor:pointer">Cash on delivery</label>
+                                    </div>
+                                    <div class="custome-radio">
+                                        <input class="form-check-input" type="radio" name="paymentOption" value="RazorPay" id="exampleRadios4">
+                                        <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse" data-target="#razorPay" aria-controls="razorPay" style="cursor:pointer">Razorpay</label>
+                                    </div>
+                                    {{!-- <div class="custome-radio">
+                                        <input class="form-check-input" type="radio" name="paymentOption" value="Paypal" id="exampleRadios5">
+                                        <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse" data-target="#paypal" aria-controls="paypal">Paypal</label>
+                                        <div class="form-group collapse in" id="paypal">
+                                            <p class="text-muted mt-5">Pay via PayPal; you can pay with your credit card if you don't have a PayPal account.</p>
+                                        </div>
+                                    </div> --}}
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-block" onclick="placeOrder(event)" id="placeOrderBtn">Place Order</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+                
+        </div>
+    </section>
+</main>
+
+
+<script>
+
+
+let totalAmount = 0;
+{{#each response.cart}}
+    totalAmount += {{multiply this.quantity this.price}}
+{{/each}}
+
+document.getElementById('subTotalAmount').innerText = totalAmount;
+document.getElementById('totalCartAmount').innerText = totalAmount;
+
+
+
+{{!-- Apply Coupon --}}
+
+function addCoupon(){
+    
+    let coupon = document.getElementById('couponCode').value
+
+    if(coupon !== ''){
+        let SubTotal = document.getElementById('subTotalAmount').innerText
+        $.ajax({
+            url:'/coupon-validation',
+            type:'GET',
+            data:{
+                subTotal:SubTotal,
+                couponCode:coupon
+                },
+            success:(response)=>{
+
+                if(response.used){
+                    document.getElementById('validCoupon').innerText = '';
+                    document.getElementById('invalidCoupon').innerText = 'Coupon already used';
+                }else{
+                    if(response.error){
+                        document.getElementById('validCoupon').innerText = '';
+                        document.getElementById('invalidCoupon').innerText = 'Invalid coupon';
+                    }else if(response.inactive){
+                        document.getElementById('validCoupon').innerText = '';
+                        document.getElementById('invalidCoupon').innerText = 'Inactive coupon';
+                    }else if(response.expired){
+                        document.getElementById('validCoupon').innerText = '';
+                        document.getElementById('invalidCoupon').innerText = 'Coupon expired';
+                    }else if(response.minimum){
+                        document.getElementById('validCoupon').innerText = '';
+                        document.getElementById('invalidCoupon').innerText = `You need to order for minimum ₹ ${response.minimum}`;
+                    }else{
+                        document.getElementById('invalidCoupon').innerText = '';
+                        document.getElementById('validCoupon').innerText = 'Coupon applied';
+                        document.getElementById('couponDiscount').innerText = response.discount;
+                        document.getElementById('totalCartAmount').innerText = response.total;
+                        document.getElementById('couponCode').setAttribute('disabled','')
+                        if(document.getElementById('wallet').checked){
+                            useWallet({{walletAmount}})
+                        }
+                    }
+                }
+            }
+        })
+    }else{
+        document.getElementById('invalidCoupon').innerText = 'Please enter coupon code';
+    }
+}
+
+
+function removeCoupon(){
+    document.getElementById('couponCode').removeAttribute('disabled')
+    document.getElementById('couponCode').value = '';
+    document.getElementById('invalidCoupon').innerText = '';
+    document.getElementById('validCoupon').innerText = '';
+    document.getElementById('couponDiscount').innerText = '0';
+    document.getElementById('totalCartAmount').innerText = document.getElementById('subTotalAmount').innerText
+    if(document.getElementById('wallet').checked){
+        useWallet({{walletAmount}})
+    }
+}
+
+
+function useWallet(walletAmount){
+    let cartTotal = parseInt(document.getElementById('totalCartAmount').innerText)
+    if(document.getElementById('wallet').checked){
+        if(walletAmount >= cartTotal){
+            document.getElementById('paymentSelectContainer').style.display = 'none'
+            document.getElementById('exampleRadios3').setAttribute('disabled','')
+            document.getElementById('exampleRadios4').setAttribute('disabled','')
+        }else{
+            document.getElementById('paymentSelectContainer').style.display = 'block'
+            document.getElementById('payableAlert').style.display = 'block'
+            document.getElementById('payableAmount').value = cartTotal - walletAmount
+        }
+    }else{
+        document.getElementById('payableAlert').style.display = 'none'
+        document.getElementById('payableAmount').value = null
+        document.getElementById('paymentSelectContainer').style.display = 'block'
+        document.getElementById('exampleRadios3').removeAttribute('disabled')
+        document.getElementById('exampleRadios4').removeAttribute('disabled')
+    }
+}
+
+
+
+function placeOrder(event){
+    event.preventDefault()
+
+    {{#if response.address}}
+    
+    document.getElementById('couponCode').removeAttribute('disabled')
+    let subTotal = document.getElementById('subTotalAmount').innerText
+    let coupon = document.getElementById('couponCode').value
+    let discount = document.getElementById('couponDiscount').innerText
+    let cartTotal = document.getElementById('totalCartAmount').innerText
+
+    $.ajax({
+        url:'/order-confirm',
+        type:'POST',
+        data:$('#formOrder').serialize()+'&subTotal='+subTotal+'&couponCode='+coupon+'&discount='+discount+'&total='+cartTotal,
+        success:(response)=>{
+            if(response.message){
+                swal({
+                    title: `Out of stock`,
+                    text: `These Products are Out of stock
+                        ${response.message}`
+                })
+            }else{
+                if(response.COD_wallet_status){
+                    swal({
+                        title: "Order placed Successful",
+                        text: "Order id:"+response.insertedId
+                    })
+                    location.href = "/view-order?id="+response.insertedId
+                }else if(response.RAZORPAY_status){
+                    getRazorpay(response)
+                }
+            }
+        },
+        error : (response)=>{
+            console.log(response);
+            location.href = "/cart"
+        }
+    })
+    {{else}}
+    swal("Please add an address");
+    
+    {{/if}}
+}
+
+const getRazorpay = (order) => {
+    console.log('inside getRazorpay-order',order)
+        var options = {
+            "key": 'rzp_test_4VsIGWWmuTgkQq', // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Acme Corp", //your business name
+            "description": "Test Transaction",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                verifyPayment(order, response);
+            },
+            "prefill": {
+                "name": "Gaurav Kumar", //your customer's name
+                "email": "gaurav.kumar@example.com",
+                "contact": "9000090000"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response) {
+            alert(response.error.code);
+            alert(response.error.description);
+            alert(response.error.source);
+            alert(response.error.step);
+            alert(response.error.reason);
+            alert(response.error.metadata.order_id);
+            alert(response.error.metadata.payment_id);
+        });
+        rzp1.open();
+    }
+
+
+    const verifyPayment = (payment, order) => {
+        console.log('verify payment with payment, order',payment, order)
+        $.ajax({
+            type: "post",
+            url: '/verify-payment',
+            data: {
+                payment,
+                order
+            },
+            success: (response) => {
+                console.log('success after- verify payment',response)
+                if(response.status) {
+                    swal({
+                        title: "Order placed Successful",
+                        text: "Order id:"+response.orderId,
+                        imageUrl: 'image.jpg'
+                    });
+                    location.href = '/view-order?id='+response.orderId
+                }else{
+                    location.href = '/order-confirm?id='+response.userId
+                }
+            }
+        })
+    }
+
+</script> 

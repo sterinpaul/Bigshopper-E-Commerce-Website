@@ -1,0 +1,45 @@
+
+
+<section class="content-main">
+  <div class="container">
+   
+    <div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover text-center" id="productsTable">
+            <thead>
+              <tr>
+                <th class="text-center" scope="col">No.</th>
+                <th class="text-center" scope="col">Name</th>
+                <th class="text-center" scope="col">Gender</th>
+                <th class="text-center" scope="col">Email</th>
+                <th class="text-center" scope="col">Mobile No.</th>
+                <th class="text-center" scope="col" style="text-align:center;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="shopProductContainer">
+              {{#each users}}
+              <tr>
+                <td>{{inc @index}}</td>
+                <td>{{this.fName}} {{this.lName}}</td>
+                <td>{{this.gender}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.mobile}}</td>
+
+                <td class="col-1">
+                  <a href="/admin/edit-user?id={{this._id}}" class="btn btn-primary" style="width:5rem;">Edit</a>
+                  {{#if this.access}}
+                  <a href="/admin/block-user?id={{this._id}}" class="btn btn-danger mt-1" style="width:5rem;" onclick="return confirm(`Do you want to block '{{this.fName}} {{this.lName}}' ?`)">Block</a>
+                    {{else}}
+                  <a href="/admin/unblock-user?id={{this._id}}" class="btn btn-primary mt-1" style="width:5rem;" onclick="return confirm(`Do you want to unblock '{{this.fName}} {{this.lName}}' ?`)">Unblock</a>
+                    {{/if}}
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

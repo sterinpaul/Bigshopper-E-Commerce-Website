@@ -1,0 +1,242 @@
+
+    
+    <main class="main-wrap p-4">
+        
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Order details</h2>
+                    <p class="ml-1">Details for Order ID: {{order._id}}</p>
+                </div>
+            </div>
+            <div class="card" id="orderContainer">
+                <header class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-lg-9 col-md-8 mb-lg-0 mb-15">
+                            <span>
+                                <i class="material-icons md-calendar_today"></i> <b>{{order.dated}}</b>
+                            </span> <br>
+                            <small class="text-muted">Order ID: {{order._id}}</small>
+                        </div>
+                        
+                        <div class="col-lg-2 col-md-2" id="statusContainer">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <select class="form-select" style="width:" id="changeOrderStatus">
+                                            <option id="statusChange">Change status</option>
+                                            <option id="statusRefunded">Refunded</option>
+                                            <option id="statusProcessing">Processing</option>
+                                            <option id="statusConfirmed">Confirmed</option>
+                                            <option id="statusShipped">Shipped</option>
+                                            <option id="statusDelivered">Delivered</option>
+                                            <option id="statusCancelled">Cancelled</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary ml-1" onclick="changeOrderStatus('{{order._id}}')">Submit</button>
+                                    </td>
+                            </table>
+                        </div>
+                        
+                    </div>
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="row mb-50 mt-20 order-info-wrap">
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-person"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Customer</h6>
+                                    <p class="mb-1">
+                                        {{order.userName}} <br> +91 {{order.address.mobileNo}}
+                                    </p>
+                                    {{!-- <a href="">View profile</a> --}}
+                                </div>
+                            </article>
+                        </div>
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-local_shipping"></i>
+                                </span>
+                                <div class="text" id="status-reason">
+                                    {{!-- <h6 class="mb-1">Order info</h6> --}}
+                                    <p class="mb-1">
+                                        Payment method: {{order.modeOfPayment}} <br> Status: <span id="orderStatus">{{order.orderStatus}}</span>
+                                    </p>
+                                    {{#if order.cancellationReason}}
+                                        <p class="mb-1">
+                                            Cancellation Reason: {{order.cancellationReason}}
+                                        </p>
+                                    {{/if}}
+                                    {{!-- <a href="">Download info</a> --}}
+                                </div>
+                            </article>
+                        </div>
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-place"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Deliver to : {{order.address.name}}</h6>
+                                    <p class="mb-1">
+                                        City: {{order.address.district}}, {{order.address.state}} <br>{{order.address.houseName}}, {{order.address.street}}, <br> {{order.address.town}} {{order.address.pinCode}}
+                                    </p>
+                                    {{!-- <a href="#">View profile</a> --}}
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                    </div> <!-- row // -->
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="table-responsive pt-3">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th width="40%">Product</th>
+                                            <th width="20%">Unit Price</th>
+                                            <th width="20%" class="text-center">Quantity</th>
+                                            <th width="20%" class="text-end" style="text-align:right">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        {{#each order.products}}
+                                        <tr>
+                                            <td>
+                                                <a class="itemside" href="/quick_view-product?id={{this._id}}">
+                                                    <div class="left">
+                                                        <img src="/img/products/{{this.images.[0]}}" width="40" height="40" class="img-xs" alt="Item">
+                                                    </div>
+                                                    <div class="info"> {{this.name}} for {{this.category}} </div>
+                                                </a>
+                                            </td>
+                                            <td> ₹ {{this.price}} </td>
+                                            <td class="text-center"> {{this.quantity}} </td>
+                                            <td class="text-end" style="text-align:right" id="orderTotal"> ₹ {{multiply this.price this.quantity}} </td>
+                                        </tr>
+                                        {{/each}}
+                                        <tr>
+                                            <td colspan="2"></td>
+                                            <td colspan="2">
+                                                <article class="float-end">
+                                                    <dl class="dlist" style="display:flex;justify-content: space-between;">
+                                                        <dt>Subtotal:</dt>
+                                                        <dd> ₹ {{order.subTotal}}</dd>
+                                                    </dl>
+                                                    <dl class="dlist" style="display:flex;justify-content: space-between;">
+                                                        <dt>Shipping cost:</dt>
+                                                        <dd> ₹ <span id="viewOrderShippingCost">0.00</dd>
+                                                    </dl>
+                                                    <dl class="dlist" style="display:flex;justify-content: space-between;">
+                                                        {{#if order.discount}}
+                                                        <dt>Coupon Discount:<span class="text-success">({{order.couponCode}})</span></dt>
+                                                        <dd> ₹{{order.discount}}</dd>
+                                                        {{else}}
+                                                        <dt>Coupon Discount:</dt>
+                                                        <dd> ₹ 0.00</dd>
+                                                        {{/if}}
+                                                    </dl>
+                                                    <dl class="dlist" style="display:flex;justify-content: space-between;">
+                                                        <dt>Grand total:</dt>
+                                                        <b><dd> ₹ <span id="viewOrderGrandTotal">{{order.total}}</span></dd></b>
+                                                    </dl>
+                                                    
+                                                </article>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+{{!-- Modal --}}
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <form id="cancellationForm">
+                    <div class="modal-body">
+
+                    <h4 class="text-center mb-4 mt-4">Reason for cancellation</h4>
+                    <table style="margin:auto">
+                        <tr>
+                        <td>
+                            <input type="radio" name="reason" id="reason1" class="form-check" checked="" value="Payment pending for long time.">
+                        </td>
+                        <td>
+                            <label class="ml-2" for="reason1">Payment pending for long time.</label>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td>
+                            <input type="radio" name="reason" id="reason2" class="form-check" value="Fraudulent activity found.">
+                        </td>
+                        <td>
+                            <label class="ml-2" for="reason2">Fraudulent activity found.</label>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td>
+                            <input type="radio" name="reason" id="reason3" class="form-check" value="Product is out of stock.">
+                        </td>
+                        <td>
+                            <label class="ml-2" for="reason3">Product is out of stock.</label>
+                        </td>
+                        </tr>
+                    </table>
+
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="submitBtn" data-bs-dismiss="modal" onclick="changeOrderStatus('{{order._id}}','Cancel')">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.getElementById('viewOrderGrandTotal').innerText = parseInt(document.getElementById('viewOrderShippingCost').innerText) + {{order.subTotal}}
+        {{!-- let orderCancellation = '{{order.orderStatus}}';
+        if(orderCancellation == 'Cancelled'){
+            document.getElementById('statusContainer').style.display = 'none'
+        } --}}
+
+        
+         {{#ifvalue order.orderStatus 'Cancelled'}}
+            document.getElementById('statusContainer').style.display = 'none'
+        {{else}}
+            document.getElementById('statusRefunded').style.display = 'none'
+        {{/ifvalue}}
+
+        {{#ifvalue order.orderStatus 'Refunded'}}
+            document.getElementById('statusContainer').style.display = 'none'
+        {{/ifvalue}}
+
+        {{#ifvalue order.orderStatus 'Delivered'}}
+            document.getElementById('statusContainer').style.display = 'none'
+        {{/ifvalue}}
+
+        {{#ifvalue order.orderStatus 'Refund Pending'}}
+        document.getElementById('statusRefunded').style.display = 'block'
+        document.getElementById('statusProcessing').style.display = 'none'
+        document.getElementById('statusConfirmed').style.display = 'none'
+        document.getElementById('statusShipped').style.display = 'none'
+        document.getElementById('statusDelivered').style.display = 'none'
+        document.getElementById('statusCancelled').style.display = 'none'
+        {{/ifvalue}} 
+        
+    </script>

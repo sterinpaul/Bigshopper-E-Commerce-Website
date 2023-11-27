@@ -1,0 +1,193 @@
+
+<!-- Modal1 -->
+
+		<div class="container">
+			<div class="bg0 p-t-60 p-b-30 p-lr-15-lg how-pos3-parent">
+				
+				<div class="row">
+					<div class="col-md-6 col-lg-7 p-b-30">
+						<div class="p-l-25 p-r-30 p-lr-0-lg">
+							<div class="wrap-slick3 flex-sb flex-w">
+								<div class="wrap-slick3-dots"></div>
+								<div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
+
+								<div class="slick3 gallery-lb">
+									<div class="item-slick3" data-thumb="/img/products/{{product.images.[0]}}">
+										<div class="wrap-pic-w pos-relative">
+											<img src="/img/products/{{product.images.[0]}}" alt="IMG-PRODUCT">
+
+											<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="/img/products/{{product.images.[0]}}">
+												<i class="fa fa-expand"></i>
+											</a>
+										</div>
+									</div>
+
+									<div class="item-slick3" data-thumb="/img/products/{{product.images.[1]}}">
+										<div class="wrap-pic-w pos-relative">
+											<img src="/img/products/{{product.images.[1]}}" alt="IMG-PRODUCT">
+
+											<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="/img/products/{{product.images.[1]}}">
+												<i class="fa fa-expand"></i>
+											</a>
+										</div>
+									</div>
+
+									<div class="item-slick3" data-thumb="/img/products/{{product.images.[2]}}">
+										<div class="wrap-pic-w pos-relative">
+											<img src="/img/products/{{product.images.[2]}}" alt="IMG-PRODUCT">
+
+											<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="/img/products/{{product.images.[2]}}">
+												<i class="fa fa-expand"></i>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+                    <div class="col-md-6 col-lg-5 p-b-30">
+						<div class="p-r-50 p-t-5 p-lr-0-lg">
+							<h4 class="mtext-105 cl2 js-name-detail p-b-14">
+								{{product.brand}} {{product.name}}
+							</h4>
+
+							<span class="mtext-106 cl2">
+								₹ {{product.price}}
+							</span>
+
+							<p class="stext-102 cl3 p-t-23">
+								{{product.specification}}
+							</p>
+							
+							
+							<!-- Size and Color -->
+							{{!-- <div class="p-t-33">
+								<div class="flex-w flex-r-m p-b-10">
+									<div class="size-203 flex-c-m respon6">
+										Size
+									</div>
+
+									<div class="size-204 respon6-next">
+										<div class="rs1-select2 bor8 bg0">
+											<select class="js-select2" name="time">
+												<option>Choose an option</option>
+												<option>Size S</option>
+												<option>Size M</option>
+												<option>Size L</option>
+												<option>Size XL</option>
+											</select>
+											<div class="dropDownSelect2"></div>
+										</div>
+									</div>
+								</div>
+
+								<div class="flex-w flex-r-m p-b-10">
+									<div class="size-203 flex-c-m respon6">
+										Color
+									</div>
+
+									<div class="size-204 respon6-next">
+										<div class="rs1-select2 bor8 bg0">
+											<select class="js-select2" name="time">
+												<option>Choose an option</option>
+												<option>Red</option>
+												<option>Blue</option>
+												<option>White</option>
+												<option>Grey</option>
+											</select>
+											<div class="dropDownSelect2"></div>
+										</div>
+									</div>
+								</div> --}}
+
+
+								{{!-- <form method="post" action="/addToCart?id={{product._id}}" onsubmit="confirmAddToCart("{{product._id}}")" enctype="application/x-www-form-urlencoded"> --}}
+								<form id="formForQuickAdd">
+									<div class="flex-w flex-r-m p-b-10">
+										<div class="size-204 flex-w flex-m respon6-next" id="addToContainer">
+											{{#if proNoExist}}
+											<div class="wrap-num-product flex-w m-r-20 m-tb-10">
+												<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+													<i class="fs-16 zmdi zmdi-minus"></i>
+												</div>
+
+												<input class="mtext-104 cl3 txt-center num-product" type="number" name="qty" value="1">
+
+												<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+													<i class="fs-16 zmdi zmdi-plus"></i>
+												</div>
+											</div>
+												{{#if userName}}
+												<button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" value="{{product._id}}" id="quickViewAddToCart" onclick="confirmAddToCart(event)">
+												Add to cart
+												</button>
+												{{else}}
+												<a href="/signin" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+												Add to cart
+												</a>
+												{{/if}}
+											{{else}}				
+											<a href="/cart" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+											View cart
+											</a>
+											{{/if}}								
+										</div>
+									</div>
+								</form>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+<script>
+	function confirmAddToCart(event){
+		event.preventDefault()
+		
+		swal({
+  			title: "Are you sure?",
+  			text: "Do you want to add this item to your cart ?",
+  			{{!-- icon: "warning", --}}
+  			buttons: true,
+  			dangerMode: false,
+		})
+		.then((willDelete) => {
+  			if (willDelete) {
+			let id = document.getElementById('quickViewAddToCart').value
+				$.ajax({
+					url:'/addToCart?id='+id,
+					type:'POST',
+					data:$('#formForQuickAdd').serialize(),
+					success:(response)=>{
+						console.log('sdjhc',response)
+						if(response.noLogin){
+							swal( "Please Login !!", "warning");
+							window.location.href='/'
+						}else{
+							if(response.status){
+								swal("Added!", "Product added to cart !", "success");
+								$(document).ready(function(){
+                					$('#cartChange').load(window.location.href + ' #cartChange' );
+									$('#cartChangeM').load(window.location.href + ' #cartChangeM' );
+									$('#addToContainer').load(window.location.href + ' #addToContainer' );
+              					})
+							}else{
+								if(response.qty){
+									swal("Sorry !", `Only ${response.qty} item remaining in stock !` , "warning");
+								}else{
+									swal("Sorry !", "Product is out of stock", "warning");
+								}
+							}
+						}
+					}
+				})
+  			}
+		})
+	}
+  		
+
+</script>

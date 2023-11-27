@@ -1,0 +1,315 @@
+
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title text-center pt-3">Discount Coupons </h2>
+        </div>
+        <div class="text-right mr-4">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Coupon</button>
+        </div>
+    </div>
+    <div>
+        <div class="card-body m-2">
+            <div class="table-responsive">
+                <table class="table table-hover text-center" id="coupon-table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">No.</th>
+                            <th class="text-center">Coupon Code</th>
+                            <th class="text-center">Start Date</th>
+                            <th class="text-center">Expiry Date</th>
+                            <th class="text-center">Mini. Order</th>
+                            <th class="text-center">Discount%</th>
+                            <th class="text-center">Max. Discount</th>
+                            <th class="text-center">Description</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Action </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each coupons}}
+                        <tr>
+                            <td>
+                                {{inc @index}}
+                            </td>
+                            <td>
+                                {{this.couponCode}}
+                            </td>
+                            <td>
+                                {{this.couponStartDate}}
+                            </td>
+                            <td>
+                                {{this.couponExpiryDate}}
+                            </td>
+                            <td>
+                                {{this.minOrder}}
+                            </td>
+                            <td>
+                                {{this.discountPercent}}
+                            </td>
+                            <td>
+                                {{this.maxDiscount}}
+                            </td>
+                            <td>
+                                {{this.couponDescription}}
+                            </td>
+                            <td>
+                                {{this.status}}
+                            </td>
+                            <td class="d-flex flex-column">
+                                <div>
+                                    <button class="btn btn-primary m-1" style="width:5rem;" onclick="editCoupon('{{this._id}}')">Edit</button>
+                                </div>
+                                {{#if this.listed}}
+                                <div>
+                                    <button class="btn btn-secondary" style="width:5rem" onclick="couponBlockUnblock('false','{{this._id}}')" id="deleteBtnUnlist">Block</button>
+                                </div>
+                                {{else}}
+                                <div>
+                                    <button class="btn btn-info" style="width:5rem" onclick="couponBlockUnblock('true','{{this._id}}')" id="deleteBtnList">Unblock</button>
+                                </div>
+                                {{/if}}
+                            </td>
+                        </tr>
+
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Button trigger modal -->
+{{!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button> --}}
+
+<!-- Add Coupon Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="couponForm" enctype="application/x-www-form-urlencoded">
+                <div class="modal-body d-flex flex-column">
+                    <h4 class="text-center p-4">Add Coupon</h4>
+                    <table class="m-auto">
+                        <thead>
+                            <tr>
+                                <th>Coupon Code</th>
+                                <td class="p-1"><input name="couponCode" class="form-control" type="text" oninput="this.value = this.value.toUpperCase()" style="text-transform:uppercase" maxlength="15" required></td>
+                            </tr>
+                            <tr>
+                                <th>Start Date</th>
+                                <td class="p-1"><input name="couponStartDate" class="form-control" type="date"></td>
+                            </tr>
+                            <tr>
+                                <th>Expiry Date</th>
+                                <td class="p-1"><input name="couponExpiryDate" class="form-control" type="date" required></td>
+                            </tr>
+                            <tr>
+                                <th>Mini. Order (Rs.)</th>
+                                <td class="p-1"><input name="minOrder" class="form-control" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" required></td>
+                            </tr>
+                            <tr>
+                                <th>Discount (%)</th>
+                                <td class="p-1"><input name="discountPercent" class="form-control" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="4" required></td>
+                            </tr>
+                            <tr>
+                                <th>Max. Discount (Rs.)</th>
+                                <td class="p-1"><input name="maxDiscount" class="form-control" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="5" required></td>
+                            </tr>
+                            <tr>
+                                <th>Description</th>
+                                <td class="p-1"><input name="couponDescription" class="form-control" type="text" oninput="this.value = this.value.toUpperCase()" style="text-transform:uppercase" maxlength="25" required></td>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    <p class="text-danger text-center" id="couponExists"></p>
+                    <div class="m-auto p-3">
+                        <button onclick="addCoupon(event)" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Coupon Modal -->
+<div class="modal fade" id="exampleModalEditCoupon" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="couponEditForm" enctype="application/x-www-form-urlencoded">
+                <div class="modal-body d-flex flex-column">
+                    <h4 class="text-center p-4">Edit Coupon</h4>
+                    <table class="m-auto">
+                        <thead id="editCouponTable">
+                            {{!-- <tr>
+                                <th>Coupon Code</th>
+                                <td class="p-1"><input name="couponCode" class="form-control" type="text" oninput="this.value = this.value.toUpperCase()" style="text-transform:uppercase" maxlength="15" disabled></td>
+                            </tr>
+                            <tr>
+                                <th>Start Date</th>
+                                <td class="p-1"><input name="couponStartDate" class="form-control" type="date"></td>
+                            </tr>
+                            <tr>
+                                <th>Expiry Date</th>
+                                <td class="p-1"><input name="couponExpiryDate" class="form-control" type="date" required></td>
+                            </tr>
+                            <tr>
+                                <th>Mini. Order (Rs.)</th>
+                                <td class="p-1"><input name="minOrder" class="form-control" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" required></td>
+                            </tr>
+                            <tr>
+                                <th>Discount (%)</th>
+                                <td class="p-1"><input name="discountPercent" class="form-control" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="4" required></td>
+                            </tr>
+                            <tr>
+                                <th>Max. Discount (Rs.)</th>
+                                <td class="p-1"><input name="maxDiscount" class="form-control" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="5" required></td>
+                            </tr>
+                            <tr>
+                                <th>Description</th>
+                                <td class="p-1"><input name="couponDescription" class="form-control" type="text" oninput="this.value = this.value.toUpperCase()" style="text-transform:uppercase" maxlength="25" required></td>
+                            </tr> --}}
+                        </thead>
+                    </table>
+                    <div class="m-auto p-3">
+                      <button onclick="updateCoupon(event)" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function addCoupon(event){
+        event.preventDefault()
+        $.ajax({
+            url:'/admin/add-coupon',
+            type:'POST',
+            data:$('#couponForm').serialize(),
+            success:(response)=>{
+                if(response.exist){
+                    document.getElementById('couponExists').innerText = 'Coupon already exists';
+                }else{
+                    $(document).ready(function(){
+                        $('#coupon-table').load(window.location.href + ' #coupon-table' );
+                    })
+
+                    $('#exampleModal').modal('hide');
+                    document.getElementById('couponExists').innerText = '';
+                }
+            }
+        })
+    }
+
+
+function editCoupon(id){
+
+    $.ajax({
+        url:'/admin/edit-coupon?id='+id,
+        type:'GET',
+        success:(response)=>{
+            
+            let editCouponTable = `
+            <tr>
+                <th>Coupon Code</th>
+                    <td class="p-1"><input name="couponCode" value="${response.couponCode}" class="form-control" type="text" oninput="this.value = this.value.toUpperCase()" style="text-transform:uppercase" maxlength="15" disabled></td>
+                    <input id="couponId" value="${response._id}" type="hidden">
+                </tr>
+                <tr>
+                    <th>Start Date</th>
+                    <td class="p-1"><input name="couponStartDate" value="${response.couponStartDate}" class="form-control" type="date"></td>
+                </tr>
+                <tr>
+                    <th>Expiry Date</th>
+                    <td class="p-1"><input name="couponExpiryDate" value="${response.couponExpiryDate}" class="form-control" type="date" required></td>
+                </tr>
+                <tr>
+                    <th>Mini. Order (Rs.)</th>
+                    <td class="p-1"><input name="minOrder" value="${response.minOrder}" class="form-control" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" required></td>
+                </tr>
+                <tr>
+                    <th>Discount (%)</th>
+                    <td class="p-1"><input name="discountPercent" value="${response.discountPercent}" class="form-control" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="4" required></td>
+                </tr>
+                <tr>
+                    <th>Max. Discount (Rs.)</th>
+                    <td class="p-1"><input name="maxDiscount" value="${response.maxDiscount}" class="form-control" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="5" required></td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td class="p-1"><input name="couponDescription" value="${response.couponDescription}" class="form-control" type="text" oninput="this.value = this.value.toUpperCase()" style="text-transform:uppercase" maxlength="25" required></td>
+            </tr>
+            `
+            document.getElementById('editCouponTable').innerHTML = editCouponTable
+            
+            $('#exampleModalEditCoupon').modal('show');
+        }
+    })
+}
+
+function updateCoupon(event){
+    event.preventDefault()
+    let couponId = document.getElementById('couponId').value
+    $.ajax({
+        url:'/admin/edit-coupon?id='+couponId,
+        type:'POST',
+        data:$('#couponEditForm').serialize(),
+        success:(response)=>{
+            if(response.status){
+                $(document).ready(function(){
+                    $('#coupon-table').load(window.location.href + ' #coupon-table' );
+                })
+                $('#exampleModalEditCoupon').modal('hide');
+            }
+        }
+    })
+}
+
+function couponBlockUnblock(status,couponId){
+    let list;
+    if(status == 'true'){
+        list = 'unblock'
+    }else{
+        list = 'block'
+    }
+    swal({
+    title: "Are you sure?",
+    text: `Do you want to ${list} this coupon ?`,
+    {{!-- icon: "warning", --}}
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((willDelete) => {
+    if (willDelete) {
+        $.ajax({
+            url:'/admin/blockUnblock-coupon',
+            type:'GET',
+            data:{
+                id:couponId,
+                listed:status
+            },
+            success:(response)=>{
+                if(response.status){
+                    $(document).ready(function(){
+                        $('#coupon-table').load(window.location.href + ' #coupon-table' );
+                    })
+                }
+            }
+        })
+    {{!--         
+        swal("Coupon has been blocked!", {
+          icon: "success",
+        }); --}}
+    }
+  })
+}
+
+
+</script>

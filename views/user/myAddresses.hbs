@@ -1,0 +1,124 @@
+
+        <section class="pt-150 pb-150">
+            <div style="margin-top:4rem; min-height:80vh; height:max-content; width:100vw">
+                <div class="row">
+                    <div class="col-lg-11 m-auto">
+                        <div class="row">
+
+                            <div class="col-md-2">
+                                <div class="dashboard-menu">
+                                    <ul class="nav flex-column" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="dashboard-tab" href="/account" role="tab" aria-controls="dashboard" aria-selected="false"><i class="fi-rs-settings-sliders mr-10"></i>Dashboard</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="orders-tab" href="/orders" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                                        </li>
+                                        {{!-- <li class="nav-item">
+                                            <a class="nav-link" id="track-orders-tab" href="#track-orders" role="tab" aria-controls="track-orders" aria-selected="false"><i class="fi-rs-shopping-cart-check mr-10"></i>Track Your Order</a>
+                                        </li> --}}
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="address-tab" href="/addresses" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
+                                        </li>
+                                        {{!-- <li class="nav-item">
+                                            <a class="nav-link" id="account-detail-tab" href="/profile" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>My Account</a>
+                                        </li> --}}
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-8 m-t-3">
+                                <div class="tab-content dashboard-content" style="overflow:scroll">
+                                    <div class="tab-pane fade active show" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                                        <div class="card">
+                                            {{#if addresses.address}}
+                                            <div class="card-header">
+                                                <h5>Addresses</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table" id="address-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>No.</th>
+                                                                <th>Address</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {{#each addresses.address}}
+                                                            <tr>
+                                                                <td>{{inc @index}}</td>
+                                                                <td>
+                                                                    {{this.name}},<br>
+                                                                    {{this.houseName}},<br>
+                                                                    {{this.street}},<br>
+                                                                    {{this.town}},<br>
+                                                                    {{this.district}},<br>
+                                                                    {{this.state}},<br>
+                                                                    {{this.pinCode}},<br>
+                                                                    {{this.mobileNo}}
+                                                                </td>
+                                                                <td>
+                                                                    <a style="width:5rem;" href="/editAddress?id={{this.id}}&order=address" class="btn btn-primary m-b-4">Edit</a>
+                                                                    <button style="width:5rem;" onclick="deleteAddress('{{this.id}}')" class="btn btn-danger d-block">Delete</a>
+                                                                </td>
+                                                            </tr>
+                                                            {{/each}}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            {{else}}
+                                            <div class="card-header">
+                                                <h5 class="mb-0">You haven't added any address yet</h5>
+                                            </div>
+                                            {{/if}}
+                                            <div class="m-auto p-b-5">
+                                                <a href="/addNewAddress?order=address" class="btn btn-primary">Add Address</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+    
+<script>
+
+
+    function deleteAddress(addressId){
+        swal({
+        title: "Are you sure ?",
+        text: `Do you want to remove this address ?`,
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url:'/deleteAddress',
+                type:'GET',
+                data:{
+                    id:addressId,
+                },
+                success:(response)=>{
+                    if(response.status){
+                        $(document).ready(function(){
+                            $('#address-table').load(window.location.href + ' #address-table' );
+                        })
+                    }
+                }
+            })
+        }
+      })
+    }
+
+
+</script>
