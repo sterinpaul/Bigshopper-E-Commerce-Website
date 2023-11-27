@@ -78,13 +78,13 @@ module.exports = {
     /* POST User Sign-in page */
     postSignin:(req,res)=>{
         userHelpers.dologin(req.body).then((response)=>{
-            if(response.status){
+            if(response?.status){
                 req.session.user = response.user
                 res.redirect('/')
-            }else if(response.blockedStatus){
+            }else if(response?.blockedStatus){
                 req.session.blocked = true;
                 res.redirect('/signin')
-            }else if(response.invalidStatus){
+            }else if(response?.invalidStatus){
                 req.session.invalid = true;
                 res.redirect('/signin')
             }else{
