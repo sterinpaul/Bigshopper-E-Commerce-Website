@@ -102,16 +102,22 @@
 
                 <label class="form-label" id="errorMobile"></label>
 
-                <p id="signupSendOtp" onclick="phoneAuth()">Send OTP</p>
+                <p id="signupSendOtp" onclick=phoneAuth(document.getElementById('mobile').value)>Send OTP</p>
               </div>
 
-              <div id="verifierUp" style="display:flex;justify-content:center;display:none">
-                <input class="form-control mb-3" id="OtpField" style="width:8rem;" placeholder="Enter otp">
-                <p class="otpVerify" onclick="codeverify()">Verify</p>
+              <div id="verifier" style="display:none;flex-flow:column;justify-content:center;align-items:center;">
+                <div class="form-outline form-white mb-4">
+                  <input style="width:8rem;margin:0 auto;" id="OtpField" class="form-control form-control-lg" placeholder="Enter otp"/>
+                </div>
+                <div>
+                  <p class="btn btn-primary mb-2" onclick="codeverify()">Verify</p>
+                </div>
+                <div id="unVerified" style="display:none;color: red;"> Wrong otp</div>
               </div>
+              <div id="verified" style="display:none;color: forestgreen;"> Number Verified</div>
 
               <!-- Submit button -->
-              <button type="submit" class="btn btn-primary btn-block" id="signInBtn">
+              <button type="submit" style="display:none" class="btn btn-primary btn-block" id="signInBtn">
                 Sign up
               </button>
               <label class="form-label" id="signUpValidation"></label>
@@ -120,11 +126,16 @@
                 <label class="form-label" style="color:red" id="userExistError">User already exists</label>
               {{/if}}
 
+              <div id="noAccountContainerInOtp">
+                <p class="mt-3">Already have an account ? <a href="/signin" class="text-white-50 fw-bold">Sign In</a></p>
+              </div>
+
             </form>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <div id="recaptcha-container"></div>
 </section>
 

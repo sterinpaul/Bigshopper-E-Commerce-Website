@@ -1,4 +1,4 @@
-let first,last,mailId,pass,rePass,passRePass,mobileNo,loginPass;
+let first,last,mailId,pass,rePass,passRePass,mobileNo,loginPass,mobileEntered = false;
 
 function validateFirstName(){
     let firstName = document.getElementById('form3Example1').value;
@@ -69,16 +69,19 @@ function validateRetypePassword(){
 }
 
 function validateMobile(){
-    let mobile = document.getElementById('mobile').value;
-    
-    const regex = /^\d{10}$/;
-    mobileNo = regex.test(mobile);
-    if(mobileNo){
-        document.getElementById('errorMobile').innerText="";
-        document.getElementById('signupSendOtp').style.display = 'block';
-    }else{
-        document.getElementById('errorMobile').innerText = "* Invalid Mobile Number";
-        document.getElementById('signupSendOtp').style.display = 'none';
+    if(!mobileEntered){
+        let mobile = document.getElementById('mobile').value;
+        
+        const regex = /^\d{10}$/;
+        mobileNo = regex.test(mobile);
+        
+        if(mobileNo){
+            document.getElementById('errorMobile').innerText="";
+            document.getElementById('signupSendOtp').style.display = 'block';
+        }else{
+            document.getElementById('errorMobile').innerText = "* Invalid Mobile Number";
+            document.getElementById('signupSendOtp').style.display = 'none';
+        }
     }
 }
 

@@ -214,15 +214,19 @@
         }
 		*/
         
-        function phoneAuth(){
-            var number = "+91"+document.getElementById('mobile').value;
-			
+        function phoneAuth(phoneNumber){
+            var number = "+91"+phoneNumber
+			mobileEntered = true
             firebase.auth().signInWithPhoneNumber(number,window.recaptchaVerifier).then(function(confirmationResult){
                 window.confirmationResult = confirmationResult;
                 coderesult = confirmationResult;
-				
-                document.getElementById('sender').style.display = 'none';
-                document.getElementById('verifier').style.display = 'block';
+				const sender = document.getElementById('sender')
+				const mobileNumInput = document.getElementById('mobile')
+				const signupSendOtp = document.getElementById('signupSendOtp')
+				if(sender) sender.style.display = 'none';
+				if(signupSendOtp) signupSendOtp.style.display = 'none';
+                if(mobileNumInput) mobileNumInput.readOnly = true;
+                document.getElementById('verifier').style.display = 'flex';
             }).catch(function(error){
                 console.log(error.message);
             });
@@ -236,9 +240,11 @@
                 document.getElementById('verified').style.display = 'block';
                 document.getElementById('unVerified').style.display = 'none';
 				document.getElementById('verifier').style.display = 'none';
+				document.getElementById('noAccountContainerInOtp').style.display = 'none';
 				document.getElementById('signInBtn').style.display = 'block';
 
-				document.getElementById('mobileNum').value = number;
+				const mobileNum = document.getElementById('mobileNum')
+				if(mobileNum) mobileNum.value = number;
 				
             }).catch(function(){
                 document.getElementById('verified').style.display = 'none';
