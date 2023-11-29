@@ -220,6 +220,13 @@
             firebase.auth().signInWithPhoneNumber(number,window.recaptchaVerifier).then(function(confirmationResult){
                 window.confirmationResult = confirmationResult;
                 coderesult = confirmationResult;
+				const userAuthStatusElements = document.getElementsByClassName('userAuthStatus')
+				if(userAuthStatusElements.length){
+					for(const element of userAuthStatusElements){
+						element.style.display = 'none'
+					}
+				}
+
 				const sender = document.getElementById('sender')
 				const mobileNumInput = document.getElementById('mobile')
 				const signupSendOtp = document.getElementById('signupSendOtp')
